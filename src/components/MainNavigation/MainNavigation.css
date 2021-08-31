@@ -1,0 +1,12 @@
+.navbar-container{
+    max-width: 100% !important;
+}
+
+.navbar-tabs{
+    border: 1px solid black;
+}
+
+.navbar-nav-custom{
+    justify-content: flex-end;
+    width: 100%;
+}
