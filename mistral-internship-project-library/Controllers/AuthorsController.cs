@@ -24,5 +24,12 @@ namespace Library.Controllers
         {
             return _authorService.Get();
         }
+
+        [HttpGet("{id}")]
+        public List<AuthorsGetDto> GetAuthorsByBook(int id)
+        {
+            return _authorService.GetAuthorsByBook(id);
+        }
+
     }
 }

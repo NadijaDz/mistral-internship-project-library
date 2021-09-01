@@ -23,9 +23,8 @@ namespace Library.Services
         BooksGetDto Update(int id, BookAddRequest request);
 
         //BooksGetDto Delete(int id, BookAddRequest request);
-
-        //AuthorsGetDto GetAuthorsByBook(int id);
-
+      
+    
 
     }
 
@@ -122,7 +121,7 @@ namespace Library.Services
             _mapper.Map(request, entity);
 
             entity.IsDeleted = false;
-            //
+            
 
             var book_with_authors = _context.AuthBooks.Where(b=>b.Book_Id==id).ToList();
 
@@ -156,29 +155,7 @@ namespace Library.Services
 
 
 
-        //public List<AuthorsGetDto> GetAuthorsByBook(int id)
-        //{
-            
 
-        //    var book_with_authors = _context.AuthBooks.Where(b => b.Book_Id == id).ToList();
-
-       
-
-        //    var listAuthors = _context.Authors.ToList();
-        //    var list=new List<AuthBooks>();
-
-        //    foreach(var author in listAuthors)
-        //    {
-        //         list = book_with_authors.Where(b => b.Author_Id == author.Id).ToList();
-        //    }
-
-
-          
-
-        
-
-        //    return _mapper.Map<AuthorsGetDto>(entity);
-        //}
 
 
     }

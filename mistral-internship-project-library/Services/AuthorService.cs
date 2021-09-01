@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Library.Database;
 using Library.EF;
 using Library.Library.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace Library.Services
     public interface IAuthorService
     {
         List<AuthorsGetDto> Get();
+        List<AuthorsGetDto> GetAuthorsByBook(int id);
 
     }
 
@@ -36,12 +38,26 @@ namespace Library.Services
         var query = _context.Authors.AsQueryable();
         query = query.Where(p => p.IsDeleted == false);
 
-
         var list = query.ToList();
 
         return _mapper.Map<List<AuthorsGetDto>>(list);
     }
 
+        public List<AuthorsGetDto> GetAuthorsByBook(int id)
+        {
+            var book_with_authors = _context.AuthBooks.Where(b => b.Book_Id == id).Include(a=>a.Authors);
+
+            var listAuthorsOnBook = new List<Authors>();
+
+            foreach (var author in book_with_authors)
+            {
+                listAuthorsOnBook.Add(author.Authors);
+
+            }
+
+            var list = listAuthorsOnBook.ToList();
+            return _mapper.Map<List<AuthorsGetDto>>(list);
+        }
 
     }
 }
