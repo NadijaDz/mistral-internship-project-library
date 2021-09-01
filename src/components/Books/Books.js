@@ -29,8 +29,6 @@ function Books() {
   };
   
 
-
-
   useEffect(() => {
     getAll('/Books').then((response) => {
       try {

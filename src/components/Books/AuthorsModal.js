@@ -13,7 +13,7 @@ import Multiselect from 'multiselect-react-dropdown';
 
 
 
-const AddAuthorsModal = ({ show,handleClose,allAuthors,onAuthorSelect}) => {
+const AuthorsModal = ({ show,handleClose,allAuthors,onAuthorSelect,authors}) => {
 
     
     const[authorsOnBook,setAuthorsOnBook]=useState([])
@@ -22,7 +22,22 @@ const AddAuthorsModal = ({ show,handleClose,allAuthors,onAuthorSelect}) => {
 
     const onSelect=(selectedList, selectedItem)=> {
       setSelectedValue(selectedList)
+      console.log("selektovani")
+      console.log(selectedList)
+      console.log(authors)
+
+      
   }
+  useEffect(() => {
+   
+    if(authors){
+      console.log("autor dosli")
+      console.log(authors)
+
+    }
+ 
+   }, []);
+
 
 
   return (
@@ -76,4 +91,4 @@ const AddAuthorsModal = ({ show,handleClose,allAuthors,onAuthorSelect}) => {
   );
 };
 
-export default AddAuthorsModal;
+export default AuthorsModal;

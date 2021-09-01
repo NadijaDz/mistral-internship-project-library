@@ -4,16 +4,18 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Select from 'react-select';
 import {getAll,update} from '../../services/BooksService'
+import {getById} from '../../services/AuthorsService'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import  './Books.css'
-import AddAuthorsTable from './AddAuthorsTable';
+import AuthorsTable from './AuthorsTable';
 
 
 
-const BookDetails = ({ show,handleClose,bookOnEdit}) => {
+const BookDetails = ({ showEdit,handleClose,bookOnEdit}) => {
 
+ 
     const [publishers, setPublishers] = useState([]);
 
     const[message,setStateMess]=useState()
@@ -27,12 +29,11 @@ const BookDetails = ({ show,handleClose,bookOnEdit}) => {
     const [authors, setAuthors] = useState([]);
     const [authorsForSave, setAuthorsForSave] = useState([]);
 
-    const refreshedStateBook = useRef(imagePreview);
-    useEffect(() => {
-      setImgPreview(bookOnEdit?.book?.image)
-      console.log(bookOnEdit?.book?.images)
-      refreshedStateBook.current = imagePreview;
-    }, [imagePreview]);
+    // const refreshedStateBook = useRef(bookOnEdit);
+    // useEffect(() => {
+
+    //   refreshedStateBook.current = bookOnEdit;
+    // }, [bookOnEdit]);
 
   
 
@@ -77,12 +78,9 @@ const BookDetails = ({ show,handleClose,bookOnEdit}) => {
 
     useEffect(() => {
 
-            setImgPreview({path: bookOnEdit?.book?.image})
-
-      getAll('/Authors').then((response) => {
+    getById('/Authors',bookOnEdit?.book?.id).then((response) => {
       try {
-          setAuthors(response.data);
-        
+          setAuthors(response.data);     
       } catch {
         
         toast.error('Sorry, something went wrong!', {
@@ -94,6 +92,7 @@ const BookDetails = ({ show,handleClose,bookOnEdit}) => {
 
       }
     });
+ 
   }, []);
 
   const handleAuthorsOnSubmit=(newAuthor)=>{
@@ -106,9 +105,7 @@ const BookDetails = ({ show,handleClose,bookOnEdit}) => {
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
-  
-  
+      <Modal show={showEdit}  onHide={handleClose}>
         <Formik
           initialValues={{
             title:bookOnEdit?.book?.title ,
@@ -138,19 +135,19 @@ const BookDetails = ({ show,handleClose,bookOnEdit}) => {
             publisher_Id: Yup.string()
               .required("Publisher is required")
                .nullable(),
-             authors: Yup.string().required("Authors is required").nullable(),
+            //  authors: Yup.string().required("Authors is required").nullable(),
              
           })}
           onSubmit={(fields, { resetForm }) => {
 
-            console.log("save")
-          
             const formData = new FormData();
 
-            const listAuthorsForSave=authorsForSave?.newAuthor.map((a)=>a.id);
+          
+             const listAuthorsForSave=authorsForSave?.newAuthor.map((a)=>a.id);
+             listAuthorsForSave.forEach((item)=>{formData.append('authors[]',item)})
 
-            // formData.append("authors",(authorsForSave?.newAuthor.map((a)=>a.id)));
-            listAuthorsForSave.forEach((item)=>{formData.append('authors[]',item)})
+            
+
             formData.append("id", bookOnEdit?.book?.id);
             formData.append("imageFile", imageFile);
             formData.append("title", fields.title);
@@ -303,7 +300,7 @@ const BookDetails = ({ show,handleClose,bookOnEdit}) => {
 
 
                 <div className="form-group">
-                  <AddAuthorsTable name="authors"  handleAuthorsOnSubmit={handleAuthorsOnSubmit}></AddAuthorsTable>
+                  <AuthorsTable name="authors"  handleAuthorsOnSubmit={handleAuthorsOnSubmit} authors={authors}></AuthorsTable>
                 </div>
 
               </Modal.Body>

@@ -1,10 +1,12 @@
 import React from 'react'
 
-function AddAuthorItem(authorsOnBook) {
+function AuthorItem({authorsOnBook}) {
 
+  const authorsOnBookArray = Object.values(authorsOnBook);
+  
   return (
     <tbody>
-        {authorsOnBook?.authorsOnBook?.newAuthor?.map((author) => (
+        {authorsOnBookArray.map((author) => (
         <tr key={author.id}>
           <td>{author.name}</td>
           <td>
@@ -16,4 +18,4 @@ function AddAuthorItem(authorsOnBook) {
   );
 }
 
-export default AddAuthorItem
+export default AuthorItem

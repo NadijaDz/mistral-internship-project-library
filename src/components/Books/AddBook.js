@@ -8,7 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {addNew} from '../../services/BooksService'
 import  './Books.css'
-import AddAuthorsTable from './AddAuthorsTable';
+import AuthorsTable from './AuthorsTable';
 
 
 
@@ -103,27 +103,27 @@ const AddBook = ({ show,handleClose}) => {
             imageFile: "",
           }}
           validationSchema={Yup.object().shape({
-            title: Yup.string().required("Title is required"),
-            description: Yup.string().required("Description is required"),
+            // title: Yup.string().required("Title is required"),
+            // description: Yup.string().required("Description is required"),
             //   email: Yup.string()
             //     .email("Email is invalid")
             //     .required("Email is required"),
-            pages: Yup.string().required("Pages is required"),
-            price: Yup.string().required("Price is required"),
-            publisher_Id: Yup.string()
-              .required("Publisher is required")
-               .nullable(),
-             authors: Yup.string().required("Authors is required").nullable(),
+            // pages: Yup.string().required("Pages is required"),
+            // price: Yup.string().required("Price is required"),
+            // publisher_Id: Yup.string()
+            //   .required("Publisher is required")
+            //    .nullable(),
+           
              
           })}
           onSubmit={(fields, { resetForm }) => {
-          
+
             const formData = new FormData();
 
-            const listAuthorsForSave=authorsForSave?.newAuthor.map((a)=>a.id);
+             const listAuthorsForSave=authorsForSave?.newAuthor.map((a)=>a.id);
 
             // formData.append("authors",(authorsForSave?.newAuthor.map((a)=>a.id)));
-            listAuthorsForSave.forEach((item)=>{formData.append('authors[]',item)})
+             listAuthorsForSave.forEach((item)=>{formData.append('authors[]',item)})
 
             formData.append("imageFile", imageFile);
             formData.append("title", fields.title);
@@ -131,6 +131,9 @@ const AddBook = ({ show,handleClose}) => {
             formData.append("pages", fields.pages);
             formData.append("price", fields.price);
             formData.append("publisher_Id", fields.publisher_Id);
+
+
+
 
             addNew("/Books", formData).then((res) => {
               try {
@@ -149,6 +152,7 @@ const AddBook = ({ show,handleClose}) => {
               }
             }, []);
           }}
+          validator={() => ({})}
           render={({ errors, status, touched }) => (
             <Form>
               <Modal.Header closeButton className="modal-custom-header">
@@ -276,7 +280,7 @@ const AddBook = ({ show,handleClose}) => {
 
 
                 <div className="form-group">
-                  <AddAuthorsTable name="authors"  handleAuthorsOnSubmit={handleAuthorsOnSubmit}></AddAuthorsTable>
+                  <AuthorsTable name="authors"  handleAuthorsOnSubmit={handleAuthorsOnSubmit}></AuthorsTable>
                 </div>
 
 
