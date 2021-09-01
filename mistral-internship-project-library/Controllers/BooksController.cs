@@ -53,18 +53,21 @@ namespace Library.Controllers
 
         }
 
+
         [HttpPut("{id}")]
         public BooksGetDto Update(int id, BookAddRequest request)
         {
             return _bookService.Update(id, request);
         }
 
-    
+
+
         //[HttpPut("{id}")]
         //public BooksGetDto Delete(int id, BookAddRequest request)
         //{
         //    return _bookService.Delete(id, request);
         //}
+
 
 
 
