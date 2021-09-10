@@ -9,6 +9,7 @@ namespace Library.Library.Models
    public class AuthorAddRequest
     {
         public string Name { get; set; }
+
         public string Image { get; set; }
 
         public string Biography { get; set; }
@@ -16,6 +17,9 @@ namespace Library.Library.Models
         public DateTime Birthday { get; set; }
 
         public string Email { get; set; }
+
+        public List<int> Books { get; set; }
+
         public bool? IsDeleted { get; set; }
     }
 }

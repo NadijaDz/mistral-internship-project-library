@@ -11,11 +11,14 @@ namespace Library.Database
     {
         [Key]
         public int Id { get; set; }
+
         public string Name { get; set; }
+
         public bool? IsDeleted { get; set; }
 
         [ForeignKey("Address_Id")]
         public Address Address { get; set; }
+
         public int Address_Id { get; set; }
     }
 }

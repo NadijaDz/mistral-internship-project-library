@@ -19,16 +19,41 @@ namespace Library.Controllers
             _authorService = authorService;
         }
 
+        [Route("getAllAuthors")]
         [HttpGet]
-        public List<AuthorsGetDto> Get()
+        public List<AuthorsGetDto> GetAllAuthors()
         {
-            return _authorService.Get();
+            return _authorService.GetAllAuthors();
+        }
+
+        [HttpGet]
+        public PaginationModel<IEnumerable<AuthorsGetDto>> GetByFilters([FromQuery] SearchAndPaginationModel request)
+        {
+            return _authorService.GetByFilters(request);
         }
 
         [HttpGet("{id}")]
         public List<AuthorsGetDto> GetAuthorsByBook(int id)
         {
             return _authorService.GetAuthorsByBook(id);
+        }
+
+        [HttpPost]
+        public AuthorsGetDto Insert(AuthorAddRequest request)
+        {
+            return _authorService.Insert(request);
+        }
+
+        [HttpPut("{id}")]
+        public AuthorsGetDto Update(int id, AuthorAddRequest request)
+        {
+            return _authorService.Update(id, request);
+        }
+
+        [HttpDelete("{id}")]
+        public AuthorsGetDto Delete(int id)
+        {
+            return _authorService.Delete(id);
         }
 
     }

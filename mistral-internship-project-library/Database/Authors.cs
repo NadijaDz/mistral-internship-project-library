@@ -10,7 +10,9 @@ namespace Library.Database
     {
         [Key]
         public int Id { get; set; }
+
         public string Name { get; set; }
+
         public string Image { get; set; }
 
         public string Biography { get; set; }
@@ -18,6 +20,7 @@ namespace Library.Database
         public DateTime Birthday { get; set; }
 
         public string Email { get; set; }
+
         public bool? IsDeleted { get; set; }
 
     }
