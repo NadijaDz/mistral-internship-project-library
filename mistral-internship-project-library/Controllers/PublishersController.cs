@@ -19,17 +19,36 @@ namespace Library.Controllers
             _publisherService = publisherService;
         }
 
+        [Route("getAllPublishers")]
         [HttpGet]
-        public List<PublishersGetDto> Get()
+        public List<PublishersGetDto> GetAllPublishers()
         {
-            return _publisherService.Get();
+            return _publisherService.GetAllPublishers();
         }
 
-        [Route("GetBySearchAndPagination")]
         [HttpGet]
-        public List<PublishersGetDto> GetBySearchAndPagination([FromQuery] SearchAndPaginationModel request)
+        public PaginationModel<IEnumerable<PublishersGetDto>> GetByFilters([FromQuery] SearchAndPaginationModel request)
         {
-            return _publisherService.GetBySearchAndPagination(request);
+            return _publisherService.GetByFilters(request);
         }
+
+        [HttpPost]
+        public PublishersGetDto Insert(PublisherAddRequest request)
+        {
+            return _publisherService.Insert(request);
+        }
+
+        [HttpPut("{id}")]
+        public PublishersGetDto Update(int id, PublisherAddRequest request)
+        {
+            return _publisherService.Update(id, request);
+        }
+
+        [HttpDelete("{id}")]
+        public PublishersGetDto Delete(int id)
+        {
+            return _publisherService.Delete(id);
+        }
+
     }
 }

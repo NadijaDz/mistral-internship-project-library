@@ -18,58 +18,42 @@ namespace Library.Controllers
         {
             _bookService = bookService;
         }
+        [Route("getAllBooks")]
+        [HttpGet]
+        public List<BooksGetDto> GetAllBooks()
+        {
+            return _bookService.GetAllBooks();
+        }
 
         [HttpGet]
-        public List<BooksGetDto> Get()
+        public PaginationModel<IEnumerable<BooksGetDto>> GetByFilters([FromQuery] SearchAndPaginationModel request)
         {
-            return _bookService.Get();
+            return _bookService.GetByFilters(request);
         }
 
         [HttpGet("{id}")]
-        public BooksGetDto GetById(int id)
+        public List<BooksGetDto> GetBooksByAuthor(int id)
         {
-            return _bookService.GetById(id);
+            return _bookService.GetBooksByAuthor(id);
         }
-
-        public class FileProvider
-        {
-            
-            public int KategorijaDokumentaId { get; set; }
-            public string Naziv { get; set; }
-            public string Opis { get; set; }
-
-
-            public IFormCollection FormData { get; set; }
-            public IList<IFormFile> Files { get; set; }
-        }
-
 
         [HttpPost]
-        public BooksGetDto Insert([FromForm] BookAddRequest request)
+        public BooksGetDto Insert(BookAddRequest request)
         {
-
             return _bookService.Insert(request);
-
-
         }
 
-
         [HttpPut("{id}")]
-        public BooksGetDto Update(int id, BookAddRequest request)
+        public BooksGetDto Update(int id,BookAddRequest request)
         {
             return _bookService.Update(id, request);
         }
 
-
-
-        //[HttpPut("{id}")]
-        //public BooksGetDto Delete(int id, BookAddRequest request)
-        //{
-        //    return _bookService.Delete(id, request);
-        //}
-
-
-
+        [HttpDelete("{id}")]
+        public BooksGetDto Delete(int id)
+        {
+            return _bookService.Delete(id);
+        }
 
     }
 }

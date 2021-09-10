@@ -14,18 +14,12 @@ namespace Library.Services
 {
     public interface IBookService
     {
-        List<BooksGetDto> Get();
-
-        BooksGetDto GetById(int id);
-
+        List<BooksGetDto> GetAllBooks();
+        PaginationModel<IEnumerable<BooksGetDto>> GetByFilters(SearchAndPaginationModel request);
         BooksGetDto Insert(BookAddRequest request);
-
         BooksGetDto Update(int id, BookAddRequest request);
-
-        //BooksGetDto Delete(int id, BookAddRequest request);
-      
-    
-
+        BooksGetDto Delete(int id);
+        List<BooksGetDto> GetBooksByAuthor(int id);
     }
 
     public class BookService : IBookService
@@ -44,31 +38,63 @@ namespace Library.Services
 
         }
 
-
-        public List<BooksGetDto> Get()
+        public List<BooksGetDto> GetAllBooks()
         {
-            var query = _context.Books.AsQueryable().Include(c => c.Publishers);
-            query = query.Where(p => p.IsDeleted == false).Include(c => c.Publishers);
-
-
-            var list = query.ToList();
-
+            var list = _context.Books.Where(b => b.IsDeleted == false).ToList();
             return _mapper.Map<List<BooksGetDto>>(list);
         }
 
-        public BooksGetDto GetById(int id)
+        public PaginationModel<IEnumerable<BooksGetDto>> GetByFilters(SearchAndPaginationModel request)
         {
-            var entity = _context.Books.Find(id);
+            var query = _context.Books.AsQueryable();
+            query = query.Where(p => p.IsDeleted == false);
+            var count = query.Count();
 
-            return _mapper.Map<BooksGetDto>(entity);
+            if (!string.IsNullOrWhiteSpace(request?.Title))
+            {
+                query = query.Where(x => x.Title.StartsWith(request.Title));
+            }
+
+            if (request.Page == 0)
+            {
+                request.Page = 0;
+            }
+            if (request.PageSize == 0)
+            {
+                request.PageSize = 10;
+            }
+            query = query.Skip(request.Page).Take(request.PageSize);
+
+            query = query.Include(c => c.Publishers);
+
+            var list = query.ToList();
+
+            var data = _mapper.Map<List<BooksGetDto>>(list);
+
+            return new PaginationModel<IEnumerable<BooksGetDto>>(data, count);
+
         }
 
+
+        public List<BooksGetDto> GetBooksByAuthor(int id)
+        {
+            var author_with_books = _context.AuthBooks.Where(b => b.Author_Id == id).Include(a => a.Books);
+
+            var listBooksOfAuthor = new List<Books>();
+
+            foreach (var book in author_with_books)
+            {
+                listBooksOfAuthor.Add(book.Books);
+
+            }
+
+            var list = listBooksOfAuthor.ToList();
+            return _mapper.Map<List<BooksGetDto>>(list);
+        }
 
         public BooksGetDto Insert(BookAddRequest request)
         {
             request.IsDeleted = false;
-            string uniqueFileName = UploadedFile(request);
-             request.Image = uniqueFileName;
 
             var entity = _mapper.Map<Database.Books>(request);
 
@@ -85,7 +111,7 @@ namespace Library.Services
 
                 }
             }
-          
+
 
             _context.SaveChanges();
 
@@ -93,42 +119,22 @@ namespace Library.Services
 
         }
 
-        private string UploadedFile(BookAddRequest model)
-        {
-            string uniqueFileName = null;
-            string filePath = null;
-
-            if (model.ImageFile != null)
-            {
-                var folderName = Path.Combine("Images");
-                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-
-                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Images");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImageFile.FileName;
-                 filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    model.ImageFile.CopyTo(fileStream);
-                }
-            }
-            
-            return filePath;
-        }
 
         public BooksGetDto Update(int id, BookAddRequest request)
         {
             var entity = _context.Books.Find(id);
+
             _mapper.Map(request, entity);
 
             entity.IsDeleted = false;
-            
 
-            var book_with_authors = _context.AuthBooks.Where(b=>b.Book_Id==id).ToList();
 
-            foreach(var authorId in request.Authors)
+            var book_with_authors = _context.AuthBooks.Where(b => b.Book_Id == id).ToList();
+
+            foreach (var authorId in request.Authors)
             {
                 var isAlreadyExistAuthor = book_with_authors.Where(b => b.Author_Id == authorId).ToList();
-               
+
 
                 if (isAlreadyExistAuthor.Count == 0)
                 {
@@ -142,18 +148,15 @@ namespace Library.Services
             return _mapper.Map<BooksGetDto>(entity);
         }
 
-        //public BooksGetDto Delete(int id, BookAddRequest request)
-        //{
-        //    var entity = _context.Books.Find(id);
-        //    request.IsDeleted = true;
-
-        //    _mapper.Map(request, entity);
-
-        //    _context.SaveChanges();
-        //    return _mapper.Map<BooksGetDto>(entity);
-        //}
+        public BooksGetDto Delete(int id)
+        {
+            var entity = _context.Books.Find(id);
+            entity.IsDeleted = true;
 
 
+            _context.SaveChanges();
+            return _mapper.Map<BooksGetDto>(entity);
+        }
 
 
 

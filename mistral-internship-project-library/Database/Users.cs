@@ -11,12 +11,16 @@ namespace Library.Database
     {
         [Key]
         public int Id { get; set; }
+
         public string Name { get; set; }
+
         public string Username { get; set; }
+
         public bool? IsDeleted { get; set; }
 
         [ForeignKey("Role_Id")]
         public Roles Roles { get; set; }
+
         public int Role_Id { get; set; }
 
 

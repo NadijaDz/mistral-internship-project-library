@@ -11,9 +11,11 @@ namespace Library.Database
     {
         [Key]
         public int Id { get; set; }
+
         public string Title { get; set; }
 
         public string Description { get; set; }
+
         public string Image { get; set; }
 
         public int Pages { get; set; }
@@ -24,6 +26,7 @@ namespace Library.Database
 
         [ForeignKey("Publisher_Id")]
         public Publishers Publishers { get; set; }
+
         public int Publisher_Id { get; set; }
     }
 }
