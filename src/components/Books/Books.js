@@ -1,65 +1,126 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import BookItem from "./BookItem";
-import {Table} from 'react-bootstrap'
-import  './Books.css'
-import CardPreview from '../ui/CardPreview'
-import {getAll} from '../../services/BooksService'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Table } from "react-bootstrap";
+import "./Books.css";
+import CardPreview from "../ui/CardPreview";
+import { getBooksByFilters } from "../../services/BooksService";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import AddBook from "./AddBook";
-
-
-
+import ReactPaginate from 'react-paginate';
+import "../PaginationCSS/Pagination.css";
 
 function Books() {
-
-  const [book, setBooks] = useState([]);
-
-  const [show, setShow] = useState(false);
-
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  const handleShow = () => setShow(true);
-  const handleClose = (t) => {setShow(false)
-    if(t==true){
-      setRefreshKey(oldKey => oldKey +1)
-    
-    }
-  };
-  
+  const [books, setBooks] = useState([]);
+  const [showAddBookModal, setShowAddBookModal] = useState(false);
+  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState();
+  const [page, setPage] = useState(1);
+  const [count, setCount] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [numberOfPages, setNumberOfPages] = useState();
 
   useEffect(() => {
-    getAll('/Books').then((response) => {
-      try {
-        setBooks(response.data);
-       
-      } catch {
-        
-        toast.error('Sorry, something went wrong!', {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: true,
-        
+    getBooks();
+  }, [search]);
+
+  const getBooks=(e)=>{
+    var params = null;
+    if (e == null) {
+      params = getRequestParams(search, page, pageSize);
+    } else {
+      params = e;
+    }
+    getBooksByFilters(params).then(
+      (response) => {
+        try {
+          setBooks(response.data.data);
+          const totalPages= response.data.totalCount;
+          setCount(totalPages);
+          setNumberOfPages(Math.round(totalPages/pageSize));
+        } catch {
+          toast.error("Sorry, something went wrong!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: true,
           });
-        
+        }
       }
-    });
-  }, [refreshKey]);
+    );
+  }
 
-  
 
+  const getRequestParams = (search, page, pageSize) => {
+    let params = {};
+
+    if (search) {
+      params["title"] = search;
+    }
+
+    if (page) {
+      params["page"] = page - 1;
+    }
+
+    if (pageSize) {
+      params["pageSize"] = pageSize;
+    }
+
+    var p = 0;
+    if (page > 0) {
+      p = page - 1;
+    }
+    params["skip"] = p * pageSize;
+
+    return params;
+  };
+
+  const handlePageClick = (e) => {
+    const selectedPage = e.selected;
+    if(e.selected>page){
+      setPage(selectedPage + 1)
+    }
+    else{
+      setPage(selectedPage)
+    }
+    const params = getRequestParams(search,selectedPage + 1, pageSize);
+    getBooks(params);
+};
+
+  const onCloseAddBookModal = (t) => {
+    setShowAddBookModal(false);
+    if (t == true) {
+      getBooks();
+    }
+  };
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const refreshTable=()=>{
+    getBooks();
+  }
 
   return (
     <div>
-        <ToastContainer />
+      <ToastContainer />
       <CardPreview>
         <div className="header-style">
-          <h1 className="titleOfTable">Books</h1>
-          <button className='btn-search'>Search</button>
+          <a href="/Books">
+            <h1 className="titleOfTable">Books</h1>
+          </a>
+          <div className="inputContainerSearch">
+            <i className="fa fa-search icon-search"> </i>
+            <input
+              className="field-input-search"
+              type="text"
+              placeholder="Search"
+              name="title"
+              value={query}
+              onChange={handleSearch}
+            />
+          </div>
         </div>
-        
-
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -67,18 +128,29 @@ function Books() {
               <th>Title</th>
               <th>Pages</th>
               <th>Price</th>
-              <th><button onClick={()=>handleShow(true)} >Add</button></th>
+              <th>
+                <button onClick={() => setShowAddBookModal(true)}>Add</button>
+              </th>
             </tr>
           </thead>
-          <BookItem books={book}></BookItem>
+          <BookItem books={books} onChange={refreshTable}></BookItem>
         </Table>
+        <ReactPaginate
+          previousLabel={"prev"}
+          nextLabel={"next"}
+          breakLabel={"..."}
+          breakClassName={"break-me"}
+          pageCount={numberOfPages}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          subContainerClassName={"pages pagination"}
+          activeClassName={"active"}
+        />
       </CardPreview>
-      <AddBook show={show} handleClose={handleClose}  ></AddBook>
-  
-
-
+     {showAddBookModal && <AddBook  onClose={onCloseAddBookModal}/>}
     </div>
   );
 }
-
 export default Books;

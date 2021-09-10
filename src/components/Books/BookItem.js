@@ -1,75 +1,96 @@
-import React,{useState,useRef,useEffect} from 'react'
-import BookDetails from './BookDetails';
-import BookDeleteModal from './BookDeleteModal'
-import {deleteItem} from '../../services/BooksService'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useRef, useEffect } from "react";
+import BookDetails from "./BookDetails";
+import ConfirmationModal from "../ConfirmationModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { deleteBook, getBooksByFilters } from "../../services/BooksService";
 
-function BookItem(props) {
-  
-  const [showEdit, setShow] = useState(false);
-
-  const handleShowEdit = () => setShow(true);
-  const handleClose = () => setShow(false);
-
-
-
+function BookItem({books, onChange}) {
+  const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const handleShowDelete = () => setShowDelete(true);
-  const handleCloseDelete = () => setShowDelete(false);
+  const [bookForEdit, setBookForEdit] = useState();
+  const [bookForDelete, setBookForDelete] = useState();
+  const refreshedStateBook = useRef(bookForEdit);
+  const refreshedStateBookForDelete = useRef(bookForDelete);
 
-
-  const [bookOnEdit, setBook] = useState();
-  const [bookOnDelete,setBookDelete] = useState();
-
-
-  const refreshedStateBook = useRef(bookOnEdit);
   useEffect(() => {
-    refreshedStateBook.current = bookOnEdit;
-  }, [bookOnEdit]);
+    refreshedStateBook.current = bookForEdit;
+  }, [bookForEdit]);
 
-
-  
-  const refreshedStateBookForDelete = useRef(bookOnDelete);
   useEffect(() => {
-    refreshedStateBookForDelete.current = bookOnDelete;
-  }, [bookOnDelete]);
+    refreshedStateBookForDelete.current = bookForDelete;
+  }, [bookForDelete]);
 
+  const handleEdit = (book) => {
+    setShowEdit(true);
+    setBookForEdit(book);
+  };
 
-  const handleEdit=(book)=>{
-    handleShowEdit(true) 
-    setBook(book)
+  const handleDelete = (book) => {
+    setShowDelete(true);
+    setBookForDelete(book);
+  };
+
+  const onDeleteBook = () => {
+    deleteBook(bookForDelete.book.id).then(() => {
+      try {
+        toast.success("Data is successfully deleted!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+        });
+        setShowDelete(false)
+        onChange();
+      } catch {
+        toast.error("Sorry, something went wrong!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+        });
+      }
+    });
+  };
+
+  const onBookItemDelete=()=>{
+    onDeleteBook();
   }
+  const onEditBookModalClose = (data) => {
+    setShowEdit(false);
+    if (data===true) {
+      onChange();
+    }
+  };
 
-  const handleDelete=(book)=>{
-     handleShowDelete(true) 
-     setBookDelete(book)
-   
-  }
-  
-    return (
-      <tbody>
-        {props.books.map((book) => (
-          <tr key={book.id}>
-            <td>{book.id}</td>
-            <td>{book.title}</td>
-            <td>{book.pages}</td>
-            <td>{book.price}</td>
-            <td>
-              <button  onClick={()=>handleEdit({book})}>Edit</button>
-              <button  onClick={()=>handleDelete({book})}>Delete</button>
-            
-            </td>
-          </tr>
-        ))}
+  return (
+    <tbody>
+      {books.map((book) => (
+        <tr key={book.id}>
+          <td>{book.id}</td>
+          <td>{book.title}</td>
+          <td>{book.pages}</td>
+          <td>{book.price}</td>
+          <td>
+            <button onClick={() => handleEdit({ book })}>Edit</button>
+            <button onClick={() => handleDelete({ book })}>Delete</button>
+          </td>
+        </tr>
+      ))}
 
-       {showEdit && <BookDetails showEdit={showEdit} handleClose={handleClose} bookOnEdit={bookOnEdit}></BookDetails>  }
-       {showDelete && <BookDeleteModal showDelete={showDelete} handleCloseDelete={handleCloseDelete} bookOnDelete={bookOnDelete}></BookDeleteModal>  } 
+      {showEdit && (
+        <BookDetails
+          handleClose={(data) => onEditBookModalClose(data)}
+          bookForEdit={bookForEdit}
+        />
+      )}
 
-       
-      </tbody>
-       
-    );
+      {showDelete && (
+        <ConfirmationModal
+          onClose={() => setShowDelete(false)}
+          onConfirm={onBookItemDelete}
+        />
+      )}
+    </tbody>
+  );
 }
 
-export default BookItem
+export default BookItem;

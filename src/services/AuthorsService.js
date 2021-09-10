@@ -1,35 +1,38 @@
-
 import axios from "axios";
 
 const url = process.env.REACT_APP_BASE_URL;
 
-   
+const getAuthorsByFilters = async (params) => {
+  return await axios.get(url + "/Authors", {
+    params: {
+      name: params.name,
+      page:params.skip,
+      pageSize:params.pageSize,
+    },
+  });
+};
 
-   const getAll= async(method)=>{
-         return await axios.get(url + method)
-    }
+const getAllAuthors = async () => {
+  return await axios.get(url + "/Authors/getAllAuthors");
+};
 
-    const getById= async(method,id)=>{
-        return await axios.get(url+method+'/'+ id)
+const getAuthorById = async (id) => {
+  return await axios.get(url + "/Authors" + "/" + id);
+};
 
-   }
-  
+const addAuthor = async (method, data) => {
+  return await axios.post(url + method, data);
+};
 
-    const addNew= async(method,data)=>{
-        return await axios.post(url+method,data)
+const updateAuthor = async (method, id, data) => {
+  return await axios.put(url + method + "/" + id, data, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+const deleteAuthor = async (method, id) => {
+  return await axios.delete(url + method + "/" + id);
+};
 
-   }
-
-   const update= async(method,id,data)=>{
-    return await axios.put(url+method+'/'+ id,data)
-
-}
-
-export  {getAll,addNew,update,getById}
-
-
-
-
-
-
-
+export { getAuthorsByFilters, getAllAuthors, addAuthor, updateAuthor, getAuthorById, deleteAuthor };
