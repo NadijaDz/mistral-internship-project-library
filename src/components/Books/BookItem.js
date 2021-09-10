@@ -1,31 +1,50 @@
 import React,{useState,useRef,useEffect} from 'react'
 import BookDetails from './BookDetails';
-
+import BookDeleteModal from './BookDeleteModal'
+import {deleteItem} from '../../services/BooksService'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function BookItem(props) {
   
-  const [show, setShow] = useState(false);
+  const [showEdit, setShow] = useState(false);
 
-  const handleShow = () => setShow(true);
-  const handleClose = (t) => {setShow(false)
-    // if(t==true){
-    //   setRefreshKey(oldKey => oldKey +1)
-    
-    // }
-  };
+  const handleShowEdit = () => setShow(true);
+  const handleClose = () => setShow(false);
+
+
+
+  const [showDelete, setShowDelete] = useState(false);
+  const handleShowDelete = () => setShowDelete(true);
+  const handleCloseDelete = () => setShowDelete(false);
+
+
   const [bookOnEdit, setBook] = useState();
-  
+  const [bookOnDelete,setBookDelete] = useState();
+
+
   const refreshedStateBook = useRef(bookOnEdit);
   useEffect(() => {
     refreshedStateBook.current = bookOnEdit;
   }, [bookOnEdit]);
 
 
-  const handleEdit=(book)=>{
+  
+  const refreshedStateBookForDelete = useRef(bookOnDelete);
+  useEffect(() => {
+    refreshedStateBookForDelete.current = bookOnDelete;
+  }, [bookOnDelete]);
 
-      handleShow(true)
-         
-      setBook(book)
+
+  const handleEdit=(book)=>{
+    handleShowEdit(true) 
+    setBook(book)
+  }
+
+  const handleDelete=(book)=>{
+     handleShowDelete(true) 
+     setBookDelete(book)
+   
   }
   
     return (
@@ -38,16 +57,18 @@ function BookItem(props) {
             <td>{book.price}</td>
             <td>
               <button  onClick={()=>handleEdit({book})}>Edit</button>
-              <button>Delete</button>
+              <button  onClick={()=>handleDelete({book})}>Delete</button>
+            
             </td>
           </tr>
         ))}
-      <BookDetails show={show} handleClose={handleClose} bookOnEdit={bookOnEdit}></BookDetails>
 
+       {showEdit && <BookDetails showEdit={showEdit} handleClose={handleClose} bookOnEdit={bookOnEdit}></BookDetails>  }
+       {showDelete && <BookDeleteModal showDelete={showDelete} handleCloseDelete={handleCloseDelete} bookOnDelete={bookOnDelete}></BookDeleteModal>  } 
+
+       
       </tbody>
-      
-     
-      
+       
     );
 }
 

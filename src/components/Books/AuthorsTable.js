@@ -7,16 +7,15 @@ import CardPreview from '../ui/CardPreview'
 import {getAll} from '../../services/BooksService'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import AddAuthorsModal from "./AddAuthorsModal";
-import AddAuthorItem from "./AddAuthorItem";
+import AuthorsModal from "./AuthorsModal";
+import AuthorItem from "./AuthorItem";
 
 
 
 
 
-function AddAuthorsTable({authorsInTable,handleAuthorsOnSubmit}) {
+function AuthorsTable({authorsInTable,handleAuthorsOnSubmit,authors}) {
 
- 
 
   const [show, setShow] = useState(false);
 
@@ -31,9 +30,16 @@ function AddAuthorsTable({authorsInTable,handleAuthorsOnSubmit}) {
 
 
   const refreshedStateAuthors = useRef(authorsOnBook);
+  const refreshedStateAuthorsOnEdit = useRef(authors);
+
   useEffect(() => {
+   if(authors){
+     setAuthorsOnBook(authors)
+   }
     refreshedStateAuthors.current = authorsOnBook;
-  }, [authorsOnBook]);
+    refreshedStateAuthorsOnEdit.current = authors;
+
+  }, [authorsOnBook,authors]);
 
 
   const handleShow = () => setShow(true);
@@ -41,16 +47,15 @@ function AddAuthorsTable({authorsInTable,handleAuthorsOnSubmit}) {
   const handleClose = (t) => {setShow(false)
     if(t==true){
       // setRefreshKey(oldKey => oldKey +1)
-    handleAuthorsOnSubmit(refreshedStateAuthors.current.newAuthor)
-
-  
-
+    // handleAuthorsOnSubmit(refreshedStateAuthors.current.newAuthor)
+    handleAuthorsOnSubmit(Object.values(refreshedStateAuthors.current))
     }
   };
 
 
 
   useEffect(() => {
+
 
     getAll('/Authors').then((response) => {
     try {
@@ -73,18 +78,17 @@ function AddAuthorsTable({authorsInTable,handleAuthorsOnSubmit}) {
 
 
 const handleAutorSelect=(newAuthor)=>{
-    
+
   setAuthorsOnBook((prevState) => ({
-    ...prevState,newAuthor,
+    ...prevState, ...newAuthor,
   }));
-  
 
 }
 
 
   return (
     <div>
-        <ToastContainer />
+    <ToastContainer />
       <CardPreview>
         <Table striped bordered hover>
           <thead>
@@ -93,10 +97,10 @@ const handleAutorSelect=(newAuthor)=>{
               <th><button onClick={()=>handleShow(true)} >Add</button></th>
             </tr>
           </thead>
-          <AddAuthorItem authorsOnBook={authorsOnBook}></AddAuthorItem> 
+          <AuthorItem authorsOnBook={authorsOnBook}></AuthorItem> 
         </Table>
       </CardPreview>
-      <AddAuthorsModal show={show} handleClose={handleClose} allAuthors={allAuthors} onAuthorSelect={handleAutorSelect} ></AddAuthorsModal>
+      <AuthorsModal show={show} handleClose={handleClose} allAuthors={allAuthors} authors={authorsOnBook} onAuthorSelect={handleAutorSelect} ></AuthorsModal>
 
     </div>
   )
@@ -105,4 +109,4 @@ const handleAutorSelect=(newAuthor)=>{
 
 }
 
-export default AddAuthorsTable;
+export default AuthorsTable;
