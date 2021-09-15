@@ -3,47 +3,30 @@ import { Button, Modal  } from "react-bootstrap";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Select from 'react-select';
-import {getAll} from '../../services/BooksService'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {addNew} from '../../services/BooksService'
 import  './Books.css'
 import Multiselect from 'multiselect-react-dropdown';
 
 
+const BookAuthorsModal = ({ handleClose,allAuthors,onAuthorSelect,authorsForEdit}) => {
 
-
-const AuthorsModal = ({ show,handleClose,allAuthors,onAuthorSelect,authors}) => {
-
-    
-    const[authorsOnBook,setAuthorsOnBook]=useState([])
-    
     const[selectedValue,setSelectedValue]=useState([])
-
     const onSelect=(selectedList, selectedItem)=> {
       setSelectedValue(selectedList)
-      console.log("selektovani")
-      console.log(selectedList)
-      console.log(authors)
-
-      
   }
-  useEffect(() => {
-   
-    if(authors){
-      console.log("autor dosli")
-      console.log(authors)
 
-    }
- 
-   }, []);
-
+    const refreshedStateBook = useRef([authorsForEdit]);
+    useEffect(() => {
+      refreshedStateBook.current = authorsForEdit;
+      setSelectedValue(refreshedStateBook.current)
+     
+    }, [authorsForEdit]);
 
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
-       
+      <Modal show={true} onHide={handleClose}>
         <Formik
           initialValues={{
             authors: [],
@@ -58,12 +41,12 @@ const AuthorsModal = ({ show,handleClose,allAuthors,onAuthorSelect,authors}) => 
              
           })}
           onSubmit={( { resetForm }) => {
-            
             onAuthorSelect(selectedValue);
             handleClose(true);
           }}
+     
           render={({ errors, status, touched }) => (
-            <Form>
+            <Form id="form-for-save-authors">
               <Modal.Header closeButton className="modal-custom-header">
                 <Modal.Title>Modal heading</Modal.Title>
               </Modal.Header>
@@ -81,7 +64,7 @@ const AuthorsModal = ({ show,handleClose,allAuthors,onAuthorSelect,authors}) => 
                 <Button variant="secondary" onClick={handleClose}>
                   Close
                 </Button>
-                <Button type="submit">Save </Button>
+                <Button form="form-for-save-authors" type="submit">Save </Button>
               </Modal.Footer>
             </Form>
           )}
@@ -91,4 +74,4 @@ const AuthorsModal = ({ show,handleClose,allAuthors,onAuthorSelect,authors}) => 
   );
 };
 
-export default AuthorsModal;
+export default BookAuthorsModal;

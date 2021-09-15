@@ -1,25 +1,38 @@
 import axios from "axios";
-
 const url = process.env.REACT_APP_BASE_URL;
 
-const getAll = async (method) => {
-  return await axios.get(url + method);
-
-  // const request = axios.get(url+'/Books')
-  // return request.then(response => response.data)
+const getBooksByFilters = async (params) => {
+  return await axios.get(url + "/Books", {
+    params: {
+      title: params.title,
+      page:params.skip,
+      pageSize:params.pageSize,
+    },
+  });
 };
 
-const addNew = async (method, data) => {
-  return await axios.post(url + method, data);
+const getAllBooks = async () => {
+  return await axios.get(url + "/Books/getAllBooks");
 };
 
-const update = async (method, id, data) => {
-  return await axios.put(url + method + "/" + id, data);
+const getBookById = async (id) => {
+  return await axios.get(url + "/Books" + "/" + id);
 };
 
-const deleteItem = async (method, id, data) => {
-    return await axios.delete(url + method + "/" + id, data);
-  };
-  
+const addBook = async (data) => {
+  return await axios.post(url + "/Books", data);
+};
 
-export { getAll, addNew, update,deleteItem};
+const updateBook = async ( id, data) => {
+  return await axios.put(url + "/Books" + "/" + id, data, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+const deleteBook = async ( id) => {
+  return await axios.delete(url + "/Books" + "/" + id);
+};
+
+export { getBooksByFilters, getAllBooks, getBookById, addBook, updateBook, deleteBook };

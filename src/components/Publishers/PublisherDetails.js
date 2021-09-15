@@ -4,20 +4,20 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {addPublisher} from '../../services/PublishersService'
+import {updatePublisher} from '../../services/PublishersService'
 import  './Publisher.css'
 
-const AddPublisher = ({onClose}) => {
+const PublisherDetails = ({handleClose,publisherEdit}) => {
 
   const onSubmit=(values)=>{
-    addPublisher(values).then((res) => {
+    updatePublisher(publisherEdit.publisher.id, values).then((res) => {
       try {
         toast.success("Data is successfully saved!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: true,
         });
-        onClose(true);
+        handleClose(true);
       } catch {
         toast.error("Sorry, something went wrong!", {
           position: "top-center",
@@ -27,17 +27,19 @@ const AddPublisher = ({onClose}) => {
       }
     });
   }
-   
+ 
   return (
     <>
-      <Modal show={true} onHide={onClose}>
+      <Modal show={true} onHide={handleClose}>
         <Formik
           initialValues={{
-            name: "",
-            road: "",
-            zipCode: "",
-            city: "",
-            country: "",
+            name: publisherEdit.publisher.name,
+            road: publisherEdit.publisher.road,
+            zipCode: publisherEdit.publisher.zipCode,
+            city: publisherEdit.publisher.city,
+            country: publisherEdit.publisher.country,
+            address_Id:publisherEdit.publisher.address_Id,
+            isDeleted:publisherEdit.publisher.isDeleted
           }}
           validationSchema={Yup.object().shape({
             name: Yup.string().required("Name is required"),
@@ -45,15 +47,15 @@ const AddPublisher = ({onClose}) => {
             zipCode: Yup.string().required("ZIP Code is required"),
             city: Yup.string().required("City is required"),
             country: Yup.string().required("Country is required"),
-
           })}
+
           onSubmit={(values) => {
-                onSubmit(values);
+             onSubmit(values);
           }}
-          render={({errors,touched }) => (
+          render={({field, errors, status, touched }) => (
             <Form>
               <Modal.Header closeButton className="modal-custom-header">
-                <Modal.Title>Add new publisher</Modal.Title>
+                <Modal.Title>Edit publisher</Modal.Title>
               </Modal.Header>
               <Modal.Body>
 
@@ -152,9 +154,10 @@ const AddPublisher = ({onClose}) => {
                   />
                 </div>
 
+
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="secondary" onClick={onClose}>
+                <Button variant="secondary" onClick={handleClose}>
                   Close
                 </Button>
                 <Button type="submit">Save Changes</Button>
@@ -167,4 +170,4 @@ const AddPublisher = ({onClose}) => {
   );
 };
 
-export default AddPublisher;
+export default PublisherDetails;
