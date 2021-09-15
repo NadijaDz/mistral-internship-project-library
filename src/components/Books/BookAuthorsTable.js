@@ -71,7 +71,7 @@ const getAuthors=()=>{
           <thead>
             <tr>
               <th>Authors</th>
-              <th><button type="button" onClick={()=>setShow(true)} >Add</button></th>
+              <th className="btn-end"><button className="btn-add" type="button" onClick={()=>setShow(true)} ><i className="fa fa-plus icon-add">Add New</i></button></th>
             </tr>
           </thead>
           <BookAuthorItem authorsOnBook={authorsOnBook}/>

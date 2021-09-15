@@ -138,130 +138,139 @@ const AddBook = ({ onClose }) => {
               </Modal.Header>
               <Form id="form-for-save-book">
                 <Modal.Body>
-                  <div className="form-group">
-                    <label htmlFor="title">Title</label>
-                    <Field
-                      name="title"
-                      type="text"
-                      className={
-                        "form-control" +
-                        (errors.title && touched.title ? " is-invalid" : "")
-                      }
-                    />
-                    <ErrorMessage
-                      name="title"
-                      component="div"
-                      className="invalid-feedback"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="description">Description</label>
-                    <Field
-                      name="description"
-                      type="text"
-                      className={
-                        "form-control" +
-                        (errors.description && touched.description
-                          ? " is-invalid"
-                          : "")
-                      }
-                    />
-                    <ErrorMessage
-                      name="description"
-                      component="div"
-                      className="invalid-feedback"
-                    />
-                  </div>
+                  <div className="row">
+                    <div className="col-sm-6">
+                      <div className="form-group">
+                        <label htmlFor="title">Title</label>
+                        <Field
+                          name="title"
+                          type="text"
+                          className={
+                            "form-control" +
+                            (errors.title && touched.title ? " is-invalid" : "")
+                          }
+                        />
+                        <ErrorMessage
+                          name="title"
+                          component="div"
+                          className="invalid-feedback"
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="description">Description</label>
+                        <Field
+                          as="textarea"
+                          rows="4"
+                          name="description"
+                          type="text"
+                          className={
+                            "form-control" +
+                            (errors.description && touched.description
+                              ? " is-invalid"
+                              : "")
+                          }
+                        />
+                        <ErrorMessage
+                          name="description"
+                          component="div"
+                          className="invalid-feedback"
+                        />
+                      </div>
 
-                  <div className="form-group">
-                    <label htmlFor="pages">Pages</label>
-                    <Field
-                      name="pages"
-                      type="text"
-                      className={
-                        "form-control" +
-                        (errors.pages && touched.pages ? " is-invalid" : "")
-                      }
-                    />
-                    <ErrorMessage
-                      name="pages"
-                      component="div"
-                      className="invalid-feedback"
-                    />
-                  </div>
+                      <div className="form-group">
+                        <label htmlFor="pages">Pages</label>
+                        <Field
+                          name="pages"
+                          type="text"
+                          className={
+                            "form-control" +
+                            (errors.pages && touched.pages ? " is-invalid" : "")
+                          }
+                        />
+                        <ErrorMessage
+                          name="pages"
+                          component="div"
+                          className="invalid-feedback"
+                        />
+                      </div>
 
-                  <div className="form-group">
-                    <label htmlFor="price">Price</label>
-                    <Field
-                      name="price"
-                      type="text"
-                      className={
-                        "form-control" +
-                        (errors.price && touched.price ? " is-invalid" : "")
-                      }
-                    />
-                    <ErrorMessage
-                      name="price"
-                      component="div"
-                      className="invalid-feedback"
-                    />
-                  </div>
+                      <div className="form-group">
+                        <label htmlFor="price">Price</label>
+                        <Field
+                          name="price"
+                          type="text"
+                          className={
+                            "form-control" +
+                            (errors.price && touched.price ? " is-invalid" : "")
+                          }
+                        />
+                        <ErrorMessage
+                          name="price"
+                          component="div"
+                          className="invalid-feedback"
+                        />
+                      </div>
 
-                  <div className="form-group">
-                    <label htmlFor="publisher_Id">Publisher</label>
-                    <Field
-                      as="select"
-                      name="publisher_Id"
-                      type="text"
-                      className={
-                        "form-control" +
-                        (errors.publisher_Id && touched.publisher_Id
-                          ? " is-invalid"
-                          : "")
-                      }
-                    >
-                      <option value={""}>Select Publisher</option>
-                      {publishers.map((p) => (
-                        <option value={p.id} key={p.id}>
-                          {" "}
-                          {p.name}
-                        </option>
-                      ))}
-                    </Field>
-                    <ErrorMessage
-                      name="publisher"
-                      component="div"
-                      className="invalid-feedback"
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <div className="img-holder">
-                      <img
-                        src={imagePreview}
-                        alt=""
-                        id="image"
-                        className="img"
-                      />
+                      <div className="form-group">
+                        <label htmlFor="publisher_Id">Publisher</label>
+                        <Field
+                          as="select"
+                          name="publisher_Id"
+                          type="text"
+                          className={
+                            "form-control" +
+                            (errors.publisher_Id && touched.publisher_Id
+                              ? " is-invalid"
+                              : "")
+                          }
+                        >
+                          <option value={""}>Select Publisher</option>
+                          {publishers.map((p) => (
+                            <option value={p.id} key={p.id}>
+                              {" "}
+                              {p.name}
+                            </option>
+                          ))}
+                        </Field>
+                        <ErrorMessage
+                          name="publisher"
+                          component="div"
+                          className="invalid-feedback"
+                        />
+                      </div>
                     </div>
 
-                    <input
-                      type="file"
-                      accept="image/*"
-                      name="image"
-                      id="image"
-                      onChange={(e) => {
-                        uploadImage(e);
-                      }}
-                    />
-                  </div>
+                    <div className="col-sm-6">
+                      <div className="form-group">
+                        <div className="img-holder">
+                          <img
+                            src={imagePreview}
+                            alt=""
+                            id="image"
+                            className="img"
+                          />
+                        </div>
 
-                 <div className="form-group">
-                    <BookAuthorsTable
-                      name="authors"
-                      handleAuthorsOnSubmit={handleAuthorsOnSubmit}
-                    />
-                  </div> 
+                        <input
+                          type="file"
+                          accept="image/*"
+                          name="image"
+                          id="image"
+                          className="input-for-img"
+                          onChange={(e) => {
+                            uploadImage(e);
+                          }}
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <BookAuthorsTable
+                          name="authors"
+                          handleAuthorsOnSubmit={handleAuthorsOnSubmit}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </Modal.Body>
 
                 <Modal.Footer>
@@ -280,5 +289,4 @@ const AddBook = ({ onClose }) => {
     </>
   );
 };
-
 export default AddBook;

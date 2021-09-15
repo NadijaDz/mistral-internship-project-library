@@ -1,0 +1,107 @@
+body{
+    background:#000000;
+    font-family: 'Lato', sans-serif;
+    }
+    .main-section{
+    display: flex;
+    justify-content: center;
+    }
+    .dashbord{
+    margin-top:50px;
+    margin-right: 40px;
+    display: inline-block;
+    width:25%;
+    color:#fff;
+    border-radius: 3px;
+    }
+    .dashbord:nth-last-child(1) {
+        margin-right: 0;
+      } 
+    .title-section{
+    border-radius: 5px 5px 0px 0px;
+    text-align: center;
+    background-color:#7CD6F8;
+    padding:7px 0px;
+    }
+    .title-section p{
+    margin:0px;
+    font-size:18px;
+    }
+    .icon-text-section{
+    background-color:#5BCCF6;
+    padding:10px 10px;
+    }
+    .icon-section{
+    font-size:50px;
+    float:left;
+    width:20%;
+    color:#8BDBF8;
+    margin-top: 30px;
+    }
+    .text-section{
+    width:80%;
+    float:right;
+    text-align: right;
+    margin-top: 35px;
+    }
+    .text-section h1{
+    margin:0px;
+    font-size:25px;
+    }
+    .detail-section{
+    background-color: #52B8DE;
+    cursor: pointer;
+    border-radius: 0px 0px 5px 5px;
+    height: 120px;
+    }
+    .detail-section a{
+    color:#fff;
+    }
+    .detail-section a p{
+    display: inline-block;
+    margin: 0px;
+    font-size: 12px;
+    padding:10px;
+    margin-left: 280px;
+    }
+    .detail-section a i{
+    float:right;
+    padding: 10px 5px 0px 0px;
+    }
+
+    .dashbord .view-authors-a:hover{
+        color:#b30000;
+    }
+    .dashbord .view-pulishers-a:hover{
+       color:#009933;
+    }
+    .dashbord .view-books-a:hover{
+        color:#0a58ca;
+    }
+    
+
+    .download-content .title-section{
+    background-color:#B0DA7A;
+    }
+    .download-content .icon-text-section{
+    background-color: #9CD159;
+    }
+    .download-content .detail-section{
+    background-color: #8DBC50;
+    }
+    .download-content .icon-section{
+    color:#B9DE8A;
+    }
+    .product-content .title-section{
+    background-color:#FF7979;
+    }
+    .product-content .icon-text-section{
+    background-color:#FF5757;
+    }
+    .product-content .icon-section{
+    color:#FF8989;
+    }
+    .product-content .detail-section{
+    background-color:#E64F4F;
+    }
+    

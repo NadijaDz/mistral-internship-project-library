@@ -12,7 +12,7 @@ const getBooksByFilters = async (params) => {
 };
 
 const getAllBooks = async () => {
-  return await axios.get(url + "/Books/getAllBooks");
+  return await axios.get(url + "/Books/GetAllBooks");
 };
 
 const getBookById = async (id) => {
@@ -35,4 +35,9 @@ const deleteBook = async ( id) => {
   return await axios.delete(url + "/Books" + "/" + id);
 };
 
-export { getBooksByFilters, getAllBooks, getBookById, addBook, updateBook, deleteBook };
+const countBooksPublishersAuthors = async (data) => {
+  return await axios.get(url + "/Books/CountTotalItem", data);
+};
+
+
+export { getBooksByFilters, getAllBooks, getBookById, addBook, updateBook, deleteBook, countBooksPublishersAuthors };

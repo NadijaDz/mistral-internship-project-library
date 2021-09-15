@@ -48,7 +48,7 @@ const BookAuthorsModal = ({ handleClose,allAuthors,onAuthorSelect,authorsForEdit
           render={({ errors, status, touched }) => (
             <Form id="form-for-save-authors">
               <Modal.Header closeButton className="modal-custom-header">
-                <Modal.Title>Modal heading</Modal.Title>
+                <Modal.Title>Select authors for book</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <Multiselect

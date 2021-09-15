@@ -41,7 +41,7 @@ const AuthorBookModal = ({onCloseAuhorsBookModal, allBooks, onBookSelect, booksO
           render={({ errors, status, touched }) => (
             <Form>
               <Modal.Header closeButton className="modal-custom-header">
-                <Modal.Title>Add books for author</Modal.Title>
+                <Modal.Title>Select books for author</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <Multiselect

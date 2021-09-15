@@ -37,7 +37,7 @@ function Books() {
           setBooks(response.data.data);
           const totalPages= response.data.totalCount;
           setCount(totalPages);
-          setNumberOfPages(Math.round(totalPages/pageSize));
+          setNumberOfPages(Math.ceil(totalPages/pageSize));
         } catch {
           toast.error("Sorry, something went wrong!", {
             position: "top-center",
@@ -49,12 +49,12 @@ function Books() {
     );
   }
 
-
   const getRequestParams = (search, page, pageSize) => {
     let params = {};
-
+  console.log(page)
     if (search) {
       params["title"] = search;
+      setPage(1)
     }
 
     if (page) {
@@ -128,8 +128,8 @@ function Books() {
               <th>Title</th>
               <th>Pages</th>
               <th>Price</th>
-              <th>
-                <button onClick={() => setShowAddBookModal(true)}>Add</button>
+              <th className="btn-end">
+                <button className="btn-add" onClick={() => setShowAddBookModal(true)}> <i className="fa fa-plus icon-add">Add New</i></button>
               </th>
             </tr>
           </thead>
@@ -147,6 +147,7 @@ function Books() {
           containerClassName={"pagination"}
           subContainerClassName={"pages pagination"}
           activeClassName={"active"}
+          forcePage={page-1}
         />
       </CardPreview>
      {showAddBookModal && <AddBook  onClose={onCloseAddBookModal}/>}

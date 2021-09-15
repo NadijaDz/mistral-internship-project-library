@@ -16,8 +16,8 @@ function BookAuthorItem({authorsOnBook}) {
         {authorsOnBookArray.map((author) => (
         <tr key={author.id}>
           <td>{author.name}</td>
-          <td>
-            <button type="button" onClick={() => handleViewAuthor({ author })}>View</button>
+          <td className="btn-end">
+            <button className="btn-view" type="button" onClick={() => handleViewAuthor({ author })}><i className="fa fa-eye icon-eye"></i>View</button>
           </td>
         </tr>
       ))}  
