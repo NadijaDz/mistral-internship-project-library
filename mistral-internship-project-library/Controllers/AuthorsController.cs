@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Library.Controllers
@@ -19,41 +20,76 @@ namespace Library.Controllers
             _authorService = authorService;
         }
 
-        [Route("getAllAuthors")]
+        [Route("GetAllAuthors")]
         [HttpGet]
-        public List<AuthorsGetDto> GetAllAuthors()
+        public async Task<IActionResult> GetAllAuthors(CancellationToken cancellationToken)
         {
-            return _authorService.GetAllAuthors();
+            try
+            {
+                return Ok(await _authorService.GetAllAuthors(cancellationToken));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
-        public PaginationModel<IEnumerable<AuthorsGetDto>> GetByFilters([FromQuery] SearchAndPaginationModel request)
+        public async Task<IActionResult> GetByFilters([FromQuery] SearchAndPaginationModel request, CancellationToken cancellationToken)
         {
-            return _authorService.GetByFilters(request);
+            try
+            {
+                return Ok(await _authorService.GetByFilters(request,cancellationToken));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
-        public List<AuthorsGetDto> GetAuthorsByBook(int id)
+        public  List<AuthorsGetDto> GetAuthorsByBook(int id)
         {
-            return _authorService.GetAuthorsByBook(id);
+            return  _authorService.GetAuthorsByBook(id);
         }
 
         [HttpPost]
-        public AuthorsGetDto Insert(AuthorAddRequest request)
+        public async Task<IActionResult> Insert(AuthorAddRequest request, CancellationToken cancellationToken)
         {
-            return _authorService.Insert(request);
+            try
+            {
+                return Ok(await _authorService.Insert(request, cancellationToken));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
-        public AuthorsGetDto Update(int id, AuthorAddRequest request)
+        public async Task<IActionResult> Update(int id, AuthorAddRequest request, CancellationToken cancellationToken)
         {
-            return _authorService.Update(id, request);
+            try
+            {
+                return Ok(await _authorService.Update(id, request, cancellationToken));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
-        public AuthorsGetDto Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
-            return _authorService.Delete(id);
+            try
+            {
+                return Ok(await _authorService.Delete(id, cancellationToken));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }

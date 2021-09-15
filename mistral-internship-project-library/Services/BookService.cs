@@ -2,23 +2,24 @@
 using Library.Library.Models;
 using Library.Database;
 using Library.EF;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using System.Threading;
 
 namespace Library.Services
 {
     public interface IBookService
     {
-        List<BooksGetDto> GetAllBooks();
-        PaginationModel<IEnumerable<BooksGetDto>> GetByFilters(SearchAndPaginationModel request);
-        BooksGetDto Insert(BookAddRequest request);
-        BooksGetDto Update(int id, BookAddRequest request);
-        BooksGetDto Delete(int id);
+        Task<List<BooksGetDto>> GetAllBooksAsync(CancellationToken cancellationToken);
+        //PaginationModel<IEnumerable<BooksGetDto>> GetByFilters(SearchAndPaginationModel request);
+        Task<PaginationModel<IEnumerable<BooksGetDto>>> GetByFilters(SearchAndPaginationModel request, CancellationToken cancellationToken);
+        Task<CountTotalDto> CountTotalItem(CancellationToken cancellationToken);
+        Task<BooksGetDto> Insert(BookAddRequest request,CancellationToken cancellationToken);
+        Task<BooksGetDto> Update(int id, BookAddRequest request,CancellationToken cancellationToken);
+        Task<BooksGetDto> Delete(int id, CancellationToken cancellationToken);
         List<BooksGetDto> GetBooksByAuthor(int id);
     }
 
@@ -38,22 +39,28 @@ namespace Library.Services
 
         }
 
-        public List<BooksGetDto> GetAllBooks()
+        public async Task<List<BooksGetDto>> GetAllBooksAsync(CancellationToken cancellationToken)
         {
-            var list = _context.Books.Where(b => b.IsDeleted == false).ToList();
+            var list = await _context.Books.Where(b => b.IsDeleted == false).ToListAsync(cancellationToken);
             return _mapper.Map<List<BooksGetDto>>(list);
         }
 
-        public PaginationModel<IEnumerable<BooksGetDto>> GetByFilters(SearchAndPaginationModel request)
+        public async Task<PaginationModel<IEnumerable<BooksGetDto>>> GetByFilters(SearchAndPaginationModel request, CancellationToken cancellationToken)
         {
-            var query = _context.Books.AsQueryable();
-            query = query.Where(p => p.IsDeleted == false);
-            var count = query.Count();
+            var query = _context.Books
+                .Where(b => b.IsDeleted == false
+                    && (string.IsNullOrWhiteSpace(request.Title)
+                        || b.Title.ToLower().Trim().StartsWith(request.Title.ToLower().Trim())));
 
-            if (!string.IsNullOrWhiteSpace(request?.Title))
-            {
-                query = query.Where(x => x.Title.StartsWith(request.Title));
-            }
+            //var query = _context.Books.AsQueryable();
+            //query = query.Where(p => p.IsDeleted == false);
+            var count = await query.CountAsync(cancellationToken);
+
+            //if (!string.IsNullOrWhiteSpace(request?.Title))
+            //{
+            //    query = query.Where(x => x.Title.StartsWith(request.Title));
+            //}
+
 
             if (request.Page == 0)
             {
@@ -67,7 +74,7 @@ namespace Library.Services
 
             query = query.Include(c => c.Publishers);
 
-            var list = query.ToList();
+            var list = await query.ToListAsync(cancellationToken);
 
             var data = _mapper.Map<List<BooksGetDto>>(list);
 
@@ -91,15 +98,30 @@ namespace Library.Services
             var list = listBooksOfAuthor.ToList();
             return _mapper.Map<List<BooksGetDto>>(list);
         }
+        public async Task<CountTotalDto> CountTotalItem(CancellationToken cancellationToken)
+        {
+            var countBooks = await _context.Books.Where(b=>b.IsDeleted==false).CountAsync(cancellationToken);
+            var countAuthors = await _context.Authors.Where(a => a.IsDeleted == false).CountAsync(cancellationToken);
+            var countPublishers = await _context.Publishers.Where(p => p.IsDeleted == false).CountAsync(cancellationToken);
 
-        public BooksGetDto Insert(BookAddRequest request)
+            CountTotalDto total = new CountTotalDto
+            {
+                CountBooks=countBooks,
+                CountAuthors=countAuthors,
+                CountPublishers=countPublishers
+            };
+
+            
+            return total;
+        }
+
+        public async Task<BooksGetDto> Insert(BookAddRequest request,CancellationToken cancellationToken)
         {
             request.IsDeleted = false;
-
             var entity = _mapper.Map<Database.Books>(request);
 
             _context.Books.Add(entity);
-            _context.SaveChanges();
+           await _context.SaveChangesAsync(cancellationToken);
 
             if (request.Authors != null)
             {
@@ -108,28 +130,20 @@ namespace Library.Services
                     _context.AuthBooks.Add(
                         new AuthBooks() { Book_Id = entity.Id, Author_Id = authorId }
                     );
-
                 }
             }
 
-
-            _context.SaveChanges();
-
+            await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<BooksGetDto>(entity);
-
         }
 
-
-        public BooksGetDto Update(int id, BookAddRequest request)
+        public async Task<BooksGetDto> Update(int id, BookAddRequest request,CancellationToken cancellationToken)
         {
-            var entity = _context.Books.Find(id);
-
+            var entity = await  _context.Books.FindAsync(new object[]{id},cancellationToken);
             _mapper.Map(request, entity);
-
             entity.IsDeleted = false;
 
-
-            var book_with_authors = _context.AuthBooks.Where(b => b.Book_Id == id).ToList();
+            var book_with_authors = await _context.AuthBooks.Where(b => b.Book_Id == id).ToListAsync(cancellationToken);
 
             foreach (var authorId in request.Authors)
             {
@@ -144,17 +158,15 @@ namespace Library.Services
                 }
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<BooksGetDto>(entity);
         }
 
-        public BooksGetDto Delete(int id)
+        public async Task<BooksGetDto> Delete(int id,CancellationToken cancellationToken)
         {
-            var entity = _context.Books.Find(id);
+            var entity = await _context.Books.FindAsync(new object[]{id},cancellationToken);
             entity.IsDeleted = true;
-
-
-            _context.SaveChanges();
+            await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<BooksGetDto>(entity);
         }
 
