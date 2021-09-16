@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteBook, getBooksByFilters } from "../../services/BooksService";
 
-function BookItem({books, onChange}) {
+function BookItem({ books, onChange }) {
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [bookForEdit, setBookForEdit] = useState();
@@ -39,7 +39,7 @@ function BookItem({books, onChange}) {
           autoClose: 5000,
           hideProgressBar: true,
         });
-        setShowDelete(false)
+        setShowDelete(false);
         onChange();
       } catch {
         toast.error("Sorry, something went wrong!", {
@@ -51,12 +51,13 @@ function BookItem({books, onChange}) {
     });
   };
 
-  const onBookItemDelete=()=>{
+  const onBookItemDelete = () => {
     onDeleteBook();
-  }
+  };
+
   const onEditBookModalClose = (data) => {
     setShowEdit(false);
-    if (data===true) {
+    if (data === true) {
       onChange();
     }
   };
@@ -70,8 +71,15 @@ function BookItem({books, onChange}) {
           <td>{book.pages}</td>
           <td>{book.price}</td>
           <td className="btn-end">
-            <button className="btn-edit" onClick={() => handleEdit({ book })}><i className="fa fa-edit icon-edit-delete"></i></button>
-            <button className="btn-delete" onClick={() => handleDelete({ book })}><i className="fa fa-trash icon-edit-delete"></i></button>
+            <button className="btn-edit" onClick={() => handleEdit({ book })}>
+              <i className="fa fa-edit icon-edit-delete"></i>
+            </button>
+            <button
+              className="btn-delete"
+              onClick={() => handleDelete({ book })}
+            >
+              <i className="fa fa-trash icon-edit-delete"></i>
+            </button>
           </td>
         </tr>
       ))}

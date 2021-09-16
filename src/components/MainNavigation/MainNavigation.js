@@ -23,7 +23,7 @@ function MainNavigation() {
           </Navbar.Collapse>
           <Nav>
               <Navbar.Text>
-                <Nav.Link href="/Logout">Logout</Nav.Link>
+                <Nav.Link href="/">Logout</Nav.Link>
               </Navbar.Text>
             </Nav>
         </Container>

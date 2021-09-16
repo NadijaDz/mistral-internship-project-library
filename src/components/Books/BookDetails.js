@@ -3,12 +3,12 @@ import { Button, Modal } from "react-bootstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { updateBook } from "../../services/BooksService";
-import { getAuthorById } from "../../services/AuthorsService";
+import { getAuthorsByBookId } from "../../services/AuthorsService";
 import { getAllPublishers } from "../../services/PublishersService";
+import BookAuthorsTable from "./BookAuthorsTable";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Books.css";
-import BookAuthorsTable from "./BookAuthorsTable";
 
 const BookDetails = ({ handleClose, bookForEdit }) => {
   const [publishers, setPublishers] = useState([]);
@@ -25,7 +25,6 @@ const BookDetails = ({ handleClose, bookForEdit }) => {
     if (bookForEdit.book.image) {
       setImgPreview(bookForEdit.book.image);
     }
-    
   }, []);
 
   const getPublishers = () => {
@@ -43,7 +42,8 @@ const BookDetails = ({ handleClose, bookForEdit }) => {
   };
 
   const getAllAuthorsOnBook = () => {
-    getAuthorById(bookForEdit.book.id).then((response) => {
+    console.log(bookForEdit.book.id)
+    getAuthorsByBookId(bookForEdit.book.id).then((response) => {
       try {
         setAuthorsByBook(response.data);
       } catch {
@@ -63,10 +63,15 @@ const BookDetails = ({ handleClose, bookForEdit }) => {
   };
   
   const uploadImage = async (e) => {
-    const file = e.target.files[0];
-    const base64 = await convertBase64(file);
-    setBaseImage(base64);
-    setImgPreview(base64);
+    if(e.target.files && e.target.files[0]){
+      const file = e.target.files[0];
+      const base64 = await convertBase64(file);
+      setBaseImage(base64);
+      setImgPreview(base64);
+    }
+    else{
+      setImgPreview(imagePreview);
+    }
   };
 
   const convertBase64 = (file) => {
@@ -91,7 +96,6 @@ const BookDetails = ({ handleClose, bookForEdit }) => {
         values.authors.push(item);
       });
     }
-
     updateBook(bookForEdit.book.id, values).then((res) => {
       try {
         toast.success("Data is successfully saved!", {
@@ -131,7 +135,6 @@ const BookDetails = ({ handleClose, bookForEdit }) => {
             publisher_Id: Yup.string()
               .required("Publisher is required")
               .nullable(),
-            //  authors: Yup.string().required("Authors is required").nullable(),
           })}
           onSubmit={(values) => {
             onSubmit(values);

@@ -22,7 +22,6 @@ function BookAuthorItem({authorsOnBook}) {
         </tr>
       ))}  
    {showAuthorView && <BookAuthorItemView authorForView={authorForView} onCloseAuthorView={()=>setShowAuthorView(false)} />} 
-
     </tbody>
   );
 }

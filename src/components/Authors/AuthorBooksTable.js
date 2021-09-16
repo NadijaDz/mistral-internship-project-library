@@ -70,7 +70,13 @@ function AuthorBooksTable({ handleBooksOnSubmit, booksOfAuthor }) {
             <tr>
               <th>Books</th>
               <th className="btn-end">
-                <button className="btn-add" type="button" onClick={() => setShow(true)}><i className="fa fa-plus icon-add">Add New</i></button>
+                <button
+                  className="btn-add"
+                  type="button"
+                  onClick={() => setShow(true)}
+                >
+                  <i className="fa fa-plus icon-add">Add New</i>
+                </button>
               </th>
             </tr>
           </thead>
@@ -88,5 +94,4 @@ function AuthorBooksTable({ handleBooksOnSubmit, booksOfAuthor }) {
     </div>
   );
 }
-
 export default AuthorBooksTable;

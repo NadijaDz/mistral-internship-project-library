@@ -97,7 +97,6 @@ const PublisherDetails = ({handleClose,publisherEdit}) => {
                   />
                 </div>
 
-                
                 <div className="form-group">
                   <label htmlFor="zipCode">ZIP Code</label>
                   <Field
@@ -117,7 +116,6 @@ const PublisherDetails = ({handleClose,publisherEdit}) => {
                   />
                 </div>
               </div>
-
 
               <div className="col-sm-6">
                 <div className="form-group">
@@ -139,7 +137,6 @@ const PublisherDetails = ({handleClose,publisherEdit}) => {
                   />
                 </div>
 
-
                 <div className="form-group">
                   <label htmlFor="country">Country</label>
                   <Field
@@ -160,8 +157,6 @@ const PublisherDetails = ({handleClose,publisherEdit}) => {
                 </div>
               </div>
              </div>
-
-
 
               </Modal.Body>
               <Modal.Footer>

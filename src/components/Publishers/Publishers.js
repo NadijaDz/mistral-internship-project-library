@@ -7,9 +7,8 @@ import { getPublishersByFilters } from "../../services/PublishersService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddPublisher from "./AddPublisher";
-import ReactPaginate from 'react-paginate';
+import ReactPaginate from "react-paginate";
 import "../PaginationCSS/Pagination.css";
-
 
 function Publishers() {
   const [publisher, setPublishers] = useState([]);
@@ -21,13 +20,11 @@ function Publishers() {
   const [pageSize, setPageSize] = useState(3);
   const [numberOfPages, setNumberOfPages] = useState();
 
-
   useEffect(() => {
     getPublishers();
   }, [search]);
 
   const getPublishers = (e) => {
-
     var params = null;
     if (e == null) {
       params = getRequestParams(search, page, pageSize);
@@ -38,10 +35,9 @@ function Publishers() {
     getPublishersByFilters(params).then((response) => {
       try {
         setPublishers(response.data.data);
-        const totalPages= response.data.totalCount;
+        const totalPages = response.data.totalCount;
         setCount(totalPages);
-        setNumberOfPages(Math.round(totalPages/pageSize));
-
+        setNumberOfPages(Math.round(totalPages / pageSize));
       } catch {
         toast.error("Sorry, something went wrong!", {
           position: "top-center",
@@ -51,8 +47,6 @@ function Publishers() {
       }
     });
   };
-
-
 
   const getRequestParams = (search, page, pageSize) => {
     let params = {};
@@ -81,10 +75,10 @@ function Publishers() {
   const handleSearch = (event) => {
     setSearch(event.target.value);
   };
+
   const refreshTable = () => {
     getPublishers();
   };
-
 
   const onCloseAddPublisherModal = (t) => {
     setShowAddPublisherModal(false);
@@ -93,18 +87,16 @@ function Publishers() {
     }
   };
 
-
   const handlePageClick = (e) => {
     const selectedPage = e.selected;
-    if(e.selected>page){
-      setPage(selectedPage + 1)
+    if (e.selected > page) {
+      setPage(selectedPage + 1);
+    } else {
+      setPage(selectedPage);
     }
-    else{
-      setPage(selectedPage)
-    }
-    const params = getRequestParams(search,selectedPage + 1, pageSize);
+    const params = getRequestParams(search, selectedPage + 1, pageSize);
     getPublishers(params);
-};
+  };
 
   return (
     <div>
@@ -114,7 +106,6 @@ function Publishers() {
           <a href="/Publishers">
             <h1 className="titleOfTable">Publishers</h1>
           </a>
-
           <div className="inputContainerSearch">
             <i className="fa fa-search icon-search"> </i>
             <input
@@ -127,7 +118,6 @@ function Publishers() {
             />
           </div>
         </div>
-
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -135,8 +125,11 @@ function Publishers() {
               <th>Name</th>
               <th>Country</th>
               <th className="btn-end">
-                <button className="btn-add" onClick={() => setShowAddPublisherModal(true)}>
-                <i className="fa fa-plus icon-add">Add New</i>
+                <button
+                  className="btn-add"
+                  onClick={() => setShowAddPublisherModal(true)}
+                >
+                  <i className="fa fa-plus icon-add">Add New</i>
                 </button>
               </th>
             </tr>

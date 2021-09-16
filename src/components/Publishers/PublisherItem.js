@@ -31,6 +31,7 @@ function PublisherItem({publishers,onChange}) {
       onChange();
     }
   };
+  
   const onDeletePublisher = () => {
     deletePublisher(publisherOnDelete.publisher.id).then(() => {
       try {

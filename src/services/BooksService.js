@@ -15,8 +15,8 @@ const getAllBooks = async () => {
   return await axios.get(url + "/Books/GetAllBooks");
 };
 
-const getBookById = async (id) => {
-  return await axios.get(url + "/Books" + "/" + id);
+const getBooksByAuthorId = async (authorId) => {
+  return await axios.get(url + "/Books" + "/" + authorId);
 };
 
 const addBook = async (data) => {
@@ -39,5 +39,4 @@ const countBooksPublishersAuthors = async (data) => {
   return await axios.get(url + "/Books/CountTotalItem", data);
 };
 
-
-export { getBooksByFilters, getAllBooks, getBookById, addBook, updateBook, deleteBook, countBooksPublishersAuthors };
+export { getBooksByFilters, getAllBooks, getBooksByAuthorId, addBook, updateBook, deleteBook, countBooksPublishersAuthors };

@@ -28,11 +28,7 @@ const AuthorBookModal = ({onCloseAuhorsBookModal, allBooks, onBookSelect, booksO
             books: [],
           }}
           validationSchema={Yup.object().shape({
-            // authors: Yup.string().required("Authors is required").nullable(),
-            //  authors:Yup.array()
-            //    .min(1,"min 1").of(Yup.object().shape({
-            //    selectedValues:Yup.string().required()
-            //  }))
+            authors: Yup.string().required("Authors is required"),
           })}
           onSubmit={() => {
             onBookSelect(selectedValue);

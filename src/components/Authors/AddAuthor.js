@@ -22,12 +22,14 @@ const AddAuthor = ({ onClose }) => {
       newBook,
     }));
   };
+
   const uploadImage = async (e) => {
     const file = e.target.files[0];
     const base64 = await convertBase64(file);
     setBaseImage(base64);
     setImgPreview(base64);
   };
+
   const convertBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -40,20 +42,16 @@ const AddAuthor = ({ onClose }) => {
       };
     });
   };
- 
-  const onSubmit=(values)=>{
 
+  const onSubmit = (values) => {
     values.image = baseImage;
-    if(booksForSave.length!=0){
-      const listBooksForSave = booksForSave?.newBook.map(
-        (a) => a.id
-      );
+    if (booksForSave.length != 0) {
+      const listBooksForSave = booksForSave?.newBook.map((a) => a.id);
       listBooksForSave.forEach((item) => {
         values.books.push(item);
       });
     }
-
-    addAuthor("/Authors", values).then((res) => {
+    addAuthor(values).then((res) => {
       try {
         toast.success("Data is successfully saved!", {
           position: "top-center",
@@ -69,8 +67,8 @@ const AddAuthor = ({ onClose }) => {
         });
       }
     }, []);
-  }
-  
+  };
+
   return (
     <>
       <Modal show={true} onHide={onClose}>
@@ -92,7 +90,7 @@ const AddAuthor = ({ onClose }) => {
               .required("Email is required"),
           })}
           onSubmit={(values) => {
-             onSubmit(values);
+            onSubmit(values);
           }}
           render={({ errors, touched }) => (
             <Form>
@@ -100,111 +98,112 @@ const AddAuthor = ({ onClose }) => {
                 <Modal.Title>Add new author</Modal.Title>
               </Modal.Header>
               <Modal.Body>
+                <div className="row">
+                  <div className="col-sm-6">
+                    <div className="form-group">
+                      <label htmlFor="name">Name</label>
+                      <Field
+                        name="name"
+                        type="text"
+                        className={
+                          "form-control" +
+                          (errors.name && touched.name ? " is-invalid" : "")
+                        }
+                      />
+                      <ErrorMessage
+                        name="name"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="biography">Biography</label>
+                      <Field
+                        as="textarea"
+                        name="biography"
+                        type="text"
+                        className={
+                          "form-control" +
+                          (errors.biography && touched.biography
+                            ? " is-invalid"
+                            : "")
+                        }
+                      />
+                      <ErrorMessage
+                        name="biography"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </div>
 
-            <div className="row">
-              <div className="col-sm-6">
-                <div className="form-group">
-                  <label htmlFor="name">Name</label>
-                  <Field
-                    name="name"
-                    type="text"
-                    className={
-                      "form-control" +
-                      (errors.name && touched.name ? " is-invalid" : "")
-                    }
-                  />
-                  <ErrorMessage
-                    name="name"
-                    component="div"
-                    className="invalid-feedback"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="biography">Biography</label>
-                  <Field
-                    as="textarea"
-                 
-                    name="biography"
-                    type="text"
-                    className={
-                      "form-control" +
-                      (errors.biography && touched.biography
-                        ? " is-invalid"
-                        : "")
-                    }
-                  />
-                  <ErrorMessage
-                    name="biography"
-                    component="div"
-                    className="invalid-feedback"
-                  />
-                </div>
+                    <div className="form-group">
+                      <label htmlFor="birthday">DOB</label>
+                      <Field
+                        name="birthday"
+                        type="date"
+                        className={
+                          "form-control" +
+                          (errors.birthday && touched.birthday
+                            ? " is-invalid"
+                            : "")
+                        }
+                      />
+                      <ErrorMessage
+                        name="birthday"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </div>
 
-                <div className="form-group">
-                  <label htmlFor="birthday">DOB</label>
-                  <Field
-                    name="birthday"
-                    type="date"
-                    className={
-                      "form-control" +
-                      (errors.birthday && touched.birthday ? " is-invalid" : "")
-                    }
-                  />
-                  <ErrorMessage
-                    name="birthday"
-                    component="div"
-                    className="invalid-feedback"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="email">Email</label>
-                  <Field
-                    name="email"
-                    type="email"
-                    className={
-                      "form-control" +
-                      (errors.email && touched.email ? " is-invalid" : "")
-                    }
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component="div"
-                    className="invalid-feedback"
-                  />
-                </div>
-              </div>
-
-
-
-
-              <div className="col-sm-6">
-                <div className="form-group">
-                  <div className="img-holder">
-                    <img src={imagePreview} alt="" id="image" className="img" />
+                    <div className="form-group">
+                      <label htmlFor="email">Email</label>
+                      <Field
+                        name="email"
+                        type="email"
+                        className={
+                          "form-control" +
+                          (errors.email && touched.email ? " is-invalid" : "")
+                        }
+                      />
+                      <ErrorMessage
+                        name="email"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                    </div>
                   </div>
 
-                  <input
-                    type="file"
-                    accept="image/*"
-                    name="image"
-                    id="image"
-                    className="input-for-img"
-                    onChange={(e) => {
-                      uploadImage(e);
-                    }}
-                  />
-                </div>
+                  <div className="col-sm-6">
+                    <div className="form-group">
+                      <div className="img-holder">
+                        <img
+                          src={imagePreview}
+                          alt=""
+                          id="image"
+                          className="img"
+                        />
+                      </div>
 
-                <div className="form-group">
-                  <AuthorBooksTable
-                    name="books"
-                    handleBooksOnSubmit={handleBooksOnSubmit}
-                  />
-                </div>
-            </div>
-            </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        name="image"
+                        id="image"
+                        className="input-for-img"
+                        onChange={(e) => {
+                          uploadImage(e);
+                        }}
+                      />
+                    </div>
 
+                    <div className="form-group">
+                      <AuthorBooksTable
+                        name="books"
+                        handleBooksOnSubmit={handleBooksOnSubmit}
+                      />
+                    </div>
+                  </div>
+                </div>
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={onClose}>

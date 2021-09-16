@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { getBookById, getAllBooks } from "../../services/BooksService";
+import { getBooksByAuthorId, getAllBooks } from "../../services/BooksService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { updateAuthor } from "../../services/AuthorsService";
@@ -27,6 +27,7 @@ const AuthorDetails = ({ onCloseEdit, authorOnEdit }) => {
       setImgPreview(authorOnEdit.author.image);
     }
   }, []);
+
   useEffect(() => {
     refreshedStateBook.current = Object.values(booksForSave);
     setBooksForSave(booksOfAuthor);
@@ -47,7 +48,7 @@ const AuthorDetails = ({ onCloseEdit, authorOnEdit }) => {
   };
 
   const getAllBooksOfAuthor = () => {
-    getBookById(authorOnEdit.author.id).then((response) => {
+    getBooksByAuthorId(authorOnEdit.author.id).then((response) => {
       try {
         setBooksOfAuthor(response.data);
       } catch {
@@ -89,17 +90,12 @@ const AuthorDetails = ({ onCloseEdit, authorOnEdit }) => {
 
   const onSubmit = (values) => {
     values.image = imagePreview;
-    
-    console.log(authorOnEdit.author.id)
-     
-
     if (booksForSave.length != 0) {
       const listBooksForSave = booksForSave.map((a) => a.id);
       listBooksForSave.forEach((item) => {
         values.books.push(item);
       });
     }
-
     updateAuthor(authorOnEdit.author.id, values).then((res) => {
       try {
         toast.success("Data is successfully saved!", {
@@ -224,10 +220,8 @@ const AuthorDetails = ({ onCloseEdit, authorOnEdit }) => {
                         className="invalid-feedback"
                       />
                     </div>
-                    </div>
+                  </div>
 
-
-                    
                   <div className="col-sm-6">
                     <div className="form-group">
                       <div className="img-holder">
@@ -250,7 +244,7 @@ const AuthorDetails = ({ onCloseEdit, authorOnEdit }) => {
                         }}
                       />
                     </div>
-                  
+
                     <div className="form-group margin-top-table-book">
                       <AuthorBooksTable
                         name="books"

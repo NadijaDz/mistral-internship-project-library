@@ -25,7 +25,8 @@ body{
     }
     .title-section p{
     margin:0px;
-    font-size:18px;
+    font-size:20px;
+    font-weight: 500;
     }
     .icon-text-section{
     background-color:#5BCCF6;
@@ -52,7 +53,7 @@ body{
     background-color: #52B8DE;
     cursor: pointer;
     border-radius: 0px 0px 5px 5px;
-    height: 120px;
+    min-height: 120px;
     }
     .detail-section a{
     color:#fff;

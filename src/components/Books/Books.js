@@ -7,7 +7,7 @@ import { getBooksByFilters } from "../../services/BooksService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddBook from "./AddBook";
-import ReactPaginate from 'react-paginate';
+import ReactPaginate from "react-paginate";
 import "../PaginationCSS/Pagination.css";
 
 function Books() {
@@ -24,67 +24,59 @@ function Books() {
     getBooks();
   }, [search]);
 
-  const getBooks=(e)=>{
+  const getBooks = (e) => {
     var params = null;
     if (e == null) {
       params = getRequestParams(search, page, pageSize);
     } else {
       params = e;
     }
-    getBooksByFilters(params).then(
-      (response) => {
-        try {
-          setBooks(response.data.data);
-          const totalPages= response.data.totalCount;
-          setCount(totalPages);
-          setNumberOfPages(Math.ceil(totalPages/pageSize));
-        } catch {
-          toast.error("Sorry, something went wrong!", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: true,
-          });
-        }
+    getBooksByFilters(params).then((response) => {
+      try {
+        setBooks(response.data.data);
+        const totalPages = response.data.totalCount;
+        setCount(totalPages);
+        setNumberOfPages(Math.ceil(totalPages / pageSize));
+      } catch {
+        toast.error("Sorry, something went wrong!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+        });
       }
-    );
-  }
+    });
+  };
 
   const getRequestParams = (search, page, pageSize) => {
     let params = {};
-  console.log(page)
     if (search) {
       params["title"] = search;
-      setPage(1)
+      setPage(1);
     }
-
     if (page) {
       params["page"] = page - 1;
     }
-
     if (pageSize) {
       params["pageSize"] = pageSize;
     }
-
     var p = 0;
     if (page > 0) {
       p = page - 1;
     }
     params["skip"] = p * pageSize;
-
     return params;
   };
 
   const handlePageClick = (e) => {
     const selectedPage = e.selected;
-    if(e.selected>page){
-      setPage(selectedPage + 1)
+    if (e.selected > page) {
+      setPage(selectedPage + 1);
+    } else {
+      setPage(selectedPage);
     }
-    else{
-      setPage(selectedPage)
-    }
-    const params = getRequestParams(search,selectedPage + 1, pageSize);
+    const params = getRequestParams(search, selectedPage + 1, pageSize);
     getBooks(params);
-};
+  };
 
   const onCloseAddBookModal = (t) => {
     setShowAddBookModal(false);
@@ -97,9 +89,9 @@ function Books() {
     setSearch(event.target.value);
   };
 
-  const refreshTable=()=>{
+  const refreshTable = () => {
     getBooks();
-  }
+  };
 
   return (
     <div>
@@ -129,7 +121,13 @@ function Books() {
               <th>Pages</th>
               <th>Price</th>
               <th className="btn-end">
-                <button className="btn-add" onClick={() => setShowAddBookModal(true)}> <i className="fa fa-plus icon-add">Add New</i></button>
+                <button
+                  className="btn-add"
+                  onClick={() => setShowAddBookModal(true)}
+                >
+                  {" "}
+                  <i className="fa fa-plus icon-add">Add New</i>
+                </button>
               </th>
             </tr>
           </thead>
@@ -147,10 +145,10 @@ function Books() {
           containerClassName={"pagination"}
           subContainerClassName={"pages pagination"}
           activeClassName={"active"}
-          forcePage={page-1}
+          forcePage={page - 1}
         />
       </CardPreview>
-     {showAddBookModal && <AddBook  onClose={onCloseAddBookModal}/>}
+      {showAddBookModal && <AddBook onClose={onCloseAddBookModal} />}
     </div>
   );
 }

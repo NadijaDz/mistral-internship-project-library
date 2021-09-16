@@ -1,44 +1,33 @@
-
 import MainNavigation from "./components/MainNavigation/MainNavigation";
-import {Route,Switch} from 'react-router-dom'
+import { Route, Switch } from "react-router-dom";
 import Home from "./components/Home/Home";
 import Books from "./components/Books/Books";
 import Publishers from "./components/Publishers/Publishers";
 import Authors from "./components/Authors/Authors";
 
-
-
-
-
 function App() {
   return (
     <div>
-   
-       <MainNavigation></MainNavigation> 
-       
-       <Switch>
-        <Route path='/' exact>
+      <MainNavigation />
+      <Switch>
+        <Route path="/" exact>
           <Home></Home>
         </Route>
-        
-        <Route path='/Books'>
+
+        <Route path="/Books">
           <Books></Books>
         </Route>
 
-        <Route path='/Publishers'>
+        <Route path="/Publishers">
           <Publishers></Publishers>
         </Route>
 
-        <Route path='/Authors'>
+        <Route path="/Authors">
           <Authors></Authors>
         </Route>
-       
-      </Switch> 
-  
+      </Switch>
     </div>
   );
- 
-  
 }
 
 export default App;

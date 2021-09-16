@@ -87,10 +87,15 @@ const AddBook = ({ onClose }) => {
   };
 
   const uploadImage = async (e) => {
-    const file = e.target.files[0];
-    const base64 = await convertBase64(file);
-    setBaseImage(base64);
-    setImgPreview(base64);
+    if(e.target.files && e.target.files[0]){
+      const file = e.target.files[0];
+      const base64 = await convertBase64(file);
+      setBaseImage(base64);
+      setImgPreview(base64);
+    }
+    else{
+      setImgPreview(imagePreview);
+    }
   };
 
   const convertBase64 = (file) => {

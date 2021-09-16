@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddAuthor from "./AddAuthor";
 import AuthorItem from "./AuthorItem";
-import ReactPaginate from 'react-paginate';
+import ReactPaginate from "react-paginate";
 import "../PaginationCSS/Pagination.css";
 
 function Authors() {
@@ -20,13 +20,11 @@ function Authors() {
   const [pageSize, setPageSize] = useState(3);
   const [numberOfPages, setNumberOfPages] = useState();
 
-
   useEffect(() => {
     getAuthors();
   }, [search]);
 
   const getAuthors = (e) => {
-  
     var params = null;
     if (e == null) {
       params = getRequestParams(search, page, pageSize);
@@ -36,9 +34,9 @@ function Authors() {
     getAuthorsByFilters(params).then((response) => {
       try {
         setAllAuthors(response.data.data);
-        const totalPages= response.data.totalCount;
+        const totalPages = response.data.totalCount;
         setCount(totalPages);
-        setNumberOfPages(Math.round(totalPages/pageSize));
+        setNumberOfPages(Math.round(totalPages / pageSize));
       } catch {
         toast.error("Sorry, something went wrong!", {
           position: "top-center",
@@ -75,15 +73,14 @@ function Authors() {
 
   const handlePageClick = (e) => {
     const selectedPage = e.selected;
-    if(e.selected>page){
-      setPage(selectedPage + 1)
+    if (e.selected > page) {
+      setPage(selectedPage + 1);
+    } else {
+      setPage(selectedPage);
     }
-    else{
-      setPage(selectedPage)
-    }
-    const params = getRequestParams(search,selectedPage + 1, pageSize);
+    const params = getRequestParams(search, selectedPage + 1, pageSize);
     getAuthors(params);
-};
+  };
 
   const onCloseAddAuthorModal = (t) => {
     setShowAddAuthorModal(false);
@@ -91,13 +88,15 @@ function Authors() {
       getAuthors();
     }
   };
+
   const handleSearch = (event) => {
     setSearch(event.target.value);
   };
-  const refreshTable=()=>{
+  
+  const refreshTable = () => {
     getAuthors();
-  }
- 
+  };
+
   return (
     <div>
       <ToastContainer />
@@ -127,7 +126,12 @@ function Authors() {
               <th>DOB</th>
               <th>Email</th>
               <th className="btn-end">
-                <button className="btn-add" onClick={()=>setShowAddAuthorModal(true)}><i className="fa fa-plus icon-add">Add New</i></button>
+                <button
+                  className="btn-add"
+                  onClick={() => setShowAddAuthorModal(true)}
+                >
+                  <i className="fa fa-plus icon-add">Add New</i>
+                </button>
               </th>
             </tr>
           </thead>
@@ -147,9 +151,8 @@ function Authors() {
           activeClassName={"active"}
         />
       </CardPreview>
-     {showAddAuthorModal && <AddAuthor  onClose={onCloseAddAuthorModal}/>}  
+      {showAddAuthorModal && <AddAuthor onClose={onCloseAddAuthorModal} />}
     </div>
   );
 }
-
 export default Authors;
