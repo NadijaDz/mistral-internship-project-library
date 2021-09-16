@@ -69,9 +69,9 @@ function BookItem({books, onChange}) {
           <td>{book.title}</td>
           <td>{book.pages}</td>
           <td>{book.price}</td>
-          <td>
-            <button onClick={() => handleEdit({ book })}>Edit</button>
-            <button onClick={() => handleDelete({ book })}>Delete</button>
+          <td className="btn-end">
+            <button className="btn-edit" onClick={() => handleEdit({ book })}><i className="fa fa-edit icon-edit-delete"></i></button>
+            <button className="btn-delete" onClick={() => handleDelete({ book })}><i className="fa fa-trash icon-edit-delete"></i></button>
           </td>
         </tr>
       ))}

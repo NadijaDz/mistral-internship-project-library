@@ -33,15 +33,8 @@ function App() {
           <Authors></Authors>
         </Route>
        
-
       </Switch> 
   
-
-
-   
-
-    
-
     </div>
   );
  

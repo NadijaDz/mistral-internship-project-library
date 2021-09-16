@@ -126,8 +126,8 @@ function Authors() {
               <th>Name</th>
               <th>DOB</th>
               <th>Email</th>
-              <th>
-                <button onClick={() => setShowAddAuthorModal(true)}>Add</button>
+              <th className="btn-end">
+                <button className="btn-add" onClick={()=>setShowAddAuthorModal(true)}><i className="fa fa-plus icon-add">Add New</i></button>
               </th>
             </tr>
           </thead>

@@ -2,11 +2,35 @@
     max-width: 100% !important;
 }
 
-.navbar-tabs{
-    border: 1px solid black;
-}
-
 .navbar-nav-custom{
     justify-content: flex-end;
     width: 100%;
+}
+
+.logo-img{
+    margin-left: 30px;
+    height: 60px;
+    width: 60px;
+}
+
+.nav-title{
+    font-size: 25px; 
+}
+
+.navbar-expand-lg .navbar-nav .nav-link{
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+}
+
+.navbar-light .navbar-nav .navbar-text .nav-link {
+    color: #007bff !important;
+    font-size: 18px;
+}
+
+.bg-blue{
+    background-color: #003d66 !important;
+}
+
+.navbar>.container a{
+ color: white !important;
 }

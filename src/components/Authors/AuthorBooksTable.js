@@ -69,8 +69,8 @@ function AuthorBooksTable({ handleBooksOnSubmit, booksOfAuthor }) {
           <thead>
             <tr>
               <th>Books</th>
-              <th>
-                <button type="button" onClick={() => setShow(true)}>Add</button>
+              <th className="btn-end">
+                <button className="btn-add" type="button" onClick={() => setShow(true)}><i className="fa fa-plus icon-add">Add New</i></button>
               </th>
             </tr>
           </thead>

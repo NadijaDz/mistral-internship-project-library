@@ -55,10 +55,12 @@ const PublisherDetails = ({handleClose,publisherEdit}) => {
           render={({field, errors, status, touched }) => (
             <Form>
               <Modal.Header closeButton className="modal-custom-header">
-                <Modal.Title>Edit publisher</Modal.Title>
+                <Modal.Title >Edit publisher</Modal.Title>
               </Modal.Header>
               <Modal.Body>
 
+            <div className="row">
+              <div className="col-sm-6">
                 <div className="form-group">
                   <label htmlFor="name">Name</label>
                   <Field
@@ -114,7 +116,10 @@ const PublisherDetails = ({handleClose,publisherEdit}) => {
                     className="invalid-feedback"
                   />
                 </div>
+              </div>
 
+
+              <div className="col-sm-6">
                 <div className="form-group">
                   <label htmlFor="city">City</label>
                   <Field
@@ -153,6 +158,9 @@ const PublisherDetails = ({handleClose,publisherEdit}) => {
                     className="invalid-feedback"
                   />
                 </div>
+              </div>
+             </div>
+
 
 
               </Modal.Body>

@@ -17,9 +17,10 @@ const BookAuthorItemView = ({ authorForView, onCloseAuthorView }) => {
 
           <div className="div-description-author">
           <p>{authorForView.author.name}</p>
-          <p>{Moment(authorForView.author.birthday).format('DD/MM/YYYY')}</p>
-          <p>{authorForView.author.email} </p>
           <p>{authorForView.author.biography}</p>
+          <p>{Moment(authorForView.author.birthday).format('DD/MM/YYYY')}</p>
+          <p className="emailOfAuthor">   <i className="fa fa-envelope email-icon"> </i>{authorForView.author.email} </p>
+     
           </div>
           </Container>
 

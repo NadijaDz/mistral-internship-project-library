@@ -42,7 +42,7 @@ const AddAuthor = ({ onClose }) => {
   };
  
   const onSubmit=(values)=>{
-     
+
     values.image = baseImage;
     if(booksForSave.length!=0){
       const listBooksForSave = booksForSave?.newBook.map(
@@ -70,7 +70,7 @@ const AddAuthor = ({ onClose }) => {
       }
     }, []);
   }
-
+  
   return (
     <>
       <Modal show={true} onHide={onClose}>
@@ -100,6 +100,9 @@ const AddAuthor = ({ onClose }) => {
                 <Modal.Title>Add new author</Modal.Title>
               </Modal.Header>
               <Modal.Body>
+
+            <div className="row">
+              <div className="col-sm-6">
                 <div className="form-group">
                   <label htmlFor="name">Name</label>
                   <Field
@@ -120,6 +123,7 @@ const AddAuthor = ({ onClose }) => {
                   <label htmlFor="biography">Biography</label>
                   <Field
                     as="textarea"
+                 
                     name="biography"
                     type="text"
                     className={
@@ -169,7 +173,12 @@ const AddAuthor = ({ onClose }) => {
                     className="invalid-feedback"
                   />
                 </div>
+              </div>
 
+
+
+
+              <div className="col-sm-6">
                 <div className="form-group">
                   <div className="img-holder">
                     <img src={imagePreview} alt="" id="image" className="img" />
@@ -180,6 +189,7 @@ const AddAuthor = ({ onClose }) => {
                     accept="image/*"
                     name="image"
                     id="image"
+                    className="input-for-img"
                     onChange={(e) => {
                       uploadImage(e);
                     }}
@@ -192,6 +202,9 @@ const AddAuthor = ({ onClose }) => {
                     handleBooksOnSubmit={handleBooksOnSubmit}
                   />
                 </div>
+            </div>
+            </div>
+
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={onClose}>

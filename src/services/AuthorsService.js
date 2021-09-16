@@ -13,26 +13,26 @@ const getAuthorsByFilters = async (params) => {
 };
 
 const getAllAuthors = async () => {
-  return await axios.get(url + "/Authors/getAllAuthors");
+  return await axios.get(url + "/Authors/GetAllAuthors");
 };
 
 const getAuthorById = async (id) => {
   return await axios.get(url + "/Authors" + "/" + id);
 };
 
-const addAuthor = async (method, data) => {
-  return await axios.post(url + method, data);
+const addAuthor = async (data) => {
+  return await axios.post(url + "/Authors", data);
 };
 
-const updateAuthor = async (method, id, data) => {
-  return await axios.put(url + method + "/" + id, data, {
+const updateAuthor = async (id, data) => {
+  return await axios.put(url + "/Authors" + "/"  + id, data, {
     headers: {
       "Content-Type": "application/json",
     },
   });
 };
-const deleteAuthor = async (method, id) => {
-  return await axios.delete(url + method + "/" + id);
+const deleteAuthor = async (id) => {
+  return await axios.delete(url + "/Authors" + "/" + id);
 };
 
 export { getAuthorsByFilters, getAllAuthors, addAuthor, updateAuthor, getAuthorById, deleteAuthor };

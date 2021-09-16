@@ -58,9 +58,9 @@ function PublisherItem({publishers,onChange}) {
           <td>{publisher.id}</td>
           <td>{publisher.name}</td>
           <td>{publisher.country}</td>
-          <td>
-            <button onClick={() => handleEdit({ publisher })}>Edit</button>
-            <button onClick={() => handleDelete({ publisher })}>Delete</button>
+          <td className="btn-end">
+            <button className="btn-edit" onClick={() => handleEdit({ publisher })}><i className="fa fa-edit icon-edit-delete"></i></button>
+            <button className="btn-delete" onClick={() => handleDelete({ publisher })}><i className="fa fa-trash icon-edit-delete"></i></button>
           </td>
         </tr>
       ))}

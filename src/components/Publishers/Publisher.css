@@ -83,4 +83,49 @@ background: transparent url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http
     padding: 5px;
     outline: 0;
  }
+ .table-striped>tbody>tr:nth-of-type(odd) {
+  --bs-table-accent-bg: none !important;
+ }
+ .icon-edit-delete{
+  margin:7px 10px;
+  font-size: 18px !important;
+ }
+ .icon-add{
+margin: 8px;
+ }
+ .icon-add::before{
+  margin-right: 10px !important;
 
+ }
+ .btn-add{
+  background: #007bff;
+  color: white;
+  outline: 0;
+  border: 0;
+ }
+
+ .btn-edit{
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+  margin-right: 10px;
+  outline: auto;
+ }
+ .btn-delete{
+  color: white;
+  background-color: #dc3545;
+  border-color: #dc3545;
+  outline: auto;
+
+ }
+.btn-end{
+ justify-content: flex-end;
+ display: flex;
+}
+
+.modal:nth-of-type(even) {
+  z-index: 1056 !important;
+}
+.modal-backdrop.show:nth-of-type(even) {
+  z-index: 1055 !important;
+}

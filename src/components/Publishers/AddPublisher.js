@@ -57,6 +57,8 @@ const AddPublisher = ({onClose}) => {
               </Modal.Header>
               <Modal.Body>
 
+              <div className="row">
+              <div className="col-sm-6">
                 <div className="form-group">
                   <label htmlFor="name">Name</label>
                   <Field
@@ -112,7 +114,10 @@ const AddPublisher = ({onClose}) => {
                     className="invalid-feedback"
                   />
                 </div>
+              </div>
+         
 
+              <div className="col-sm-6">
                 <div className="form-group">
                   <label htmlFor="city">City</label>
                   <Field
@@ -151,6 +156,11 @@ const AddPublisher = ({onClose}) => {
                     className="invalid-feedback"
                   />
                 </div>
+              </div>
+
+
+              </div>
+
 
               </Modal.Body>
               <Modal.Footer>

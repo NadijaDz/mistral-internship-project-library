@@ -78,9 +78,9 @@ function AuthorItem({authors,onChange}) {
             <td>{author.name}</td>
             <td>{Moment(author.birthday).format('DD/MM/YYYY')}</td>
             <td>{author.email}</td>
-            <td>
-              <button  onClick={()=>handleEdit({author})} >Edit</button>
-              <button  onClick={()=>handleDelete({author})}>Delete</button>
+            <td className="btn-end">
+              <button className="btn-edit"  onClick={()=>handleEdit({author})} ><i className="fa fa-edit icon-edit-delete"></i></button>
+              <button className="btn-delete"  onClick={()=>handleDelete({author})}><i className="fa fa-trash icon-edit-delete"></i></button>
             
             </td>
           </tr>

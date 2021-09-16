@@ -134,9 +134,9 @@ function Publishers() {
               <th>Id</th>
               <th>Name</th>
               <th>Country</th>
-              <th>
-                <button onClick={() => setShowAddPublisherModal(true)}>
-                  Add
+              <th className="btn-end">
+                <button className="btn-add" onClick={() => setShowAddPublisherModal(true)}>
+                <i className="fa fa-plus icon-add">Add New</i>
                 </button>
               </th>
             </tr>
