@@ -49,6 +49,5 @@ namespace Library.Controllers
         {
             return _publisherService.Delete(id);
         }
-
     }
 }

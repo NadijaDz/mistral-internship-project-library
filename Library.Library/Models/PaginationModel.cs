@@ -6,17 +6,15 @@ using System.Threading.Tasks;
 
 namespace Library.Library.Models
 {
- 
-        public class PaginationModel<T> where T : class
+    public class PaginationModel<T> where T : class
+    {
+        public PaginationModel(T data, int total)
         {
-            public PaginationModel(T data, int total)
-            {
-                Data = data;
-                TotalCount = total;
-            }
-
-            public T Data { get; set; }
-            public int TotalCount { get; set; }
+            Data = data;
+            TotalCount = total;
         }
-    
+
+        public T Data { get; set; }
+        public int TotalCount { get; set; }
+    }
 }

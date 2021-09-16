@@ -16,7 +16,7 @@ namespace Library.Services
     {
         Task<List<AuthorsGetDto>> GetAllAuthors(CancellationToken cancellationToken);
         Task<PaginationModel<IEnumerable<AuthorsGetDto>>> GetByFilters(SearchAndPaginationModel request, CancellationToken cancellationToken);
-        List<AuthorsGetDto> GetAuthorsByBook(int id);
+        Task<List<AuthorsGetDto>> GetAuthorsByBookId(int bookId, CancellationToken cancellationToken);
         Task<AuthorsGetDto> Insert(AuthorAddRequest request, CancellationToken cancellationToken);
         Task<AuthorsGetDto> Update(int id, AuthorAddRequest request, CancellationToken cancellationToken);
         Task<AuthorsGetDto> Delete(int id, CancellationToken cancellationToken);
@@ -31,7 +31,6 @@ namespace Library.Services
         {
             _context = context;
             _mapper = mapper;
-
         }
 
         public async Task<List<AuthorsGetDto>> GetAllAuthors(CancellationToken cancellationToken)
@@ -42,22 +41,11 @@ namespace Library.Services
 
         public async Task<PaginationModel<IEnumerable<AuthorsGetDto>>> GetByFilters(SearchAndPaginationModel request,CancellationToken cancellationToken)
         {
-            //var query = _context.Authors.AsQueryable();
-            //query = query.Where(p => p.IsDeleted == false);
-
             var query = _context.Authors
               .Where(a => a.IsDeleted == false
                   && (string.IsNullOrWhiteSpace(request.Name)
                       || a.Name.ToLower().Trim().StartsWith(request.Name.ToLower().Trim())));
-
             var count = await query.CountAsync(cancellationToken);
-
-
-            //if (!string.IsNullOrWhiteSpace(request?.Name))
-            //{
-            //    query = query.Where(x => x.Name.StartsWith(request.Name));
-            //}
-
             if (request.Page == 0)
             {
                 request.Page = 0;
@@ -67,41 +55,25 @@ namespace Library.Services
                 request.PageSize = 10;
             }
             query = query.Skip(request.Page).Take(request.PageSize);
-
             var list = await query.ToListAsync(cancellationToken);
-
-
             var data = _mapper.Map<List<AuthorsGetDto>>(list);
-
             return new PaginationModel<IEnumerable<AuthorsGetDto>>(data, count);
         }
 
-
-        public List<AuthorsGetDto> GetAuthorsByBook(int id)
+        public async Task<List<AuthorsGetDto>> GetAuthorsByBookId(int bookId,CancellationToken cancellationToken)
         {
-            var book_with_authors = _context.AuthBooks.Where(b => b.Book_Id == id).Include(a => a.Authors);
+            var listAuthorsOnBook = await _context.AuthBooks.Where(b => b.Book_Id == bookId)
+                .Include(a => a.Authors).Select(a=>a.Authors).ToListAsync(cancellationToken);
 
-            var listAuthorsOnBook = new List<Authors>();
-
-            foreach (var author in book_with_authors)
-            {
-                listAuthorsOnBook.Add(author.Authors);
-
-            }
-
-            var list =  listAuthorsOnBook.ToList();
-            return _mapper.Map<List<AuthorsGetDto>>(list);
+            return _mapper.Map<List<AuthorsGetDto>>(listAuthorsOnBook);
         }
 
-      
         public async Task<AuthorsGetDto> Insert(AuthorAddRequest request, CancellationToken cancellationToken)
         {
             request.IsDeleted = false;
             var entity = _mapper.Map<Database.Authors>(request);
-
             _context.Authors.Add(entity);
             await _context.SaveChangesAsync(cancellationToken);
-
             if (request.Books != null)
             {
                 foreach (var bookId in request.Books)
@@ -111,7 +83,6 @@ namespace Library.Services
                     );
                 }
             }
-
             await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<AuthorsGetDto>(entity);
         }
@@ -121,26 +92,20 @@ namespace Library.Services
             var entity = await _context.Authors.FindAsync(new object[] { id }, cancellationToken);
             _mapper.Map(request, entity);
             entity.IsDeleted = false;
-
-
             var author_with_books = _context.AuthBooks.Where(b => b.Author_Id == id).ToList();
-
             foreach (var bookId in request.Books)
             {
                 var isAlreadyExistBook = author_with_books.Where(b => b.Book_Id== bookId).ToList();
-
                 if (isAlreadyExistBook.Count == 0)
                 {
                     _context.AuthBooks.Add(
                     new AuthBooks() { Book_Id = bookId, Author_Id = entity.Id }
-                );
+                    );
                 }
             }
-
             await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<AuthorsGetDto>(entity);
         }
-
 
         public async Task<AuthorsGetDto> Delete(int id, CancellationToken cancellationToken)
         {
@@ -149,8 +114,5 @@ namespace Library.Services
             await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<AuthorsGetDto>(entity);
         }
-
-
-
     }
 }

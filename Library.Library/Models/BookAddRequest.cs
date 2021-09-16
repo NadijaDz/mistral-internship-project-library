@@ -27,6 +27,5 @@ namespace Library.Library.Models
 
         public bool? IsDeleted { get; set; }
 
-
     }
 }

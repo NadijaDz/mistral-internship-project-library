@@ -18,19 +18,12 @@ namespace Library.EF
         public DbSet<Authors> Authors { get; set; }
         public DbSet<AuthBooks> AuthBooks { get; set; }
         public DbSet<Address> Address { get; set; }
-
         public DbSet<Roles> Roles { get; set; }
         public DbSet<Users> Users { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AuthBooks>().HasKey(sc => new { sc.Book_Id, sc.Author_Id });
-
-           
         }
-
-
-
     }
 }

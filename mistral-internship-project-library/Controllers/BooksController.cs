@@ -48,10 +48,17 @@ namespace Library.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public List<BooksGetDto> GetBooksByAuthor(int id)
+        [HttpGet("{authorId}")]
+        public async Task<IActionResult> GetBooksByAuthorId(int authorId, CancellationToken cancellationToken)
         {
-            return  _bookService.GetBooksByAuthor(id);
+            try
+            {
+                return Ok(await _bookService.GetBooksByAuthorId(authorId,cancellationToken));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [Route("CountTotalItem")]
@@ -67,7 +74,6 @@ namespace Library.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Insert(BookAddRequest request, CancellationToken cancellationToken)
@@ -108,6 +114,5 @@ namespace Library.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
     }
 }

@@ -23,7 +23,6 @@ namespace Library.Services
         private readonly LibraryDBContext _context;
         protected readonly IMapper _mapper;
 
-
         public PublisherService(LibraryDBContext context, IMapper mapper)
         {
             _context = context;
@@ -42,12 +41,10 @@ namespace Library.Services
             var query = _context.Publishers.AsQueryable();
             query = query.Where(p => p.IsDeleted == false);
             var count = query.Count();
-
             if (!string.IsNullOrWhiteSpace(request?.Name))
             {
                 query = query.Where(x => x.Name.StartsWith(request.Name));
             }
-
             if (request.Page == 0)
             {
                 request.Page = 0;
@@ -57,47 +54,32 @@ namespace Library.Services
                 request.PageSize = 10;
             }
             query = query.Skip(request.Page).Take(request.PageSize);
-
             query = query.Include(c => c.Address);
-
             var list = query.ToList();
-
-         
             var data=_mapper.Map<List<PublishersGetDto>>(list);
-        
             return new PaginationModel<IEnumerable<PublishersGetDto>>(data, count);
-
         }
-
 
         public PublishersGetDto Insert(PublisherAddRequest request)
         {
-
             request.IsDeleted = false;
             var entityAddress = _mapper.Map<Database.Address>(request);
             _context.Address.Add(entityAddress);
             _context.SaveChanges();
 
-
             request.Address_Id = entityAddress.Id;
             var entityPublisher = _mapper.Map<Database.Publishers>(request);
-
             _context.Publishers.Add(entityPublisher);
             _context.SaveChanges();
-
-
             return _mapper.Map<PublishersGetDto>(entityPublisher);
-
         }
+
         public PublishersGetDto Update(int id, PublisherAddRequest request)
         {
             var entityPublisher = _context.Publishers.Find(id);
             _mapper.Map(request, entityPublisher);
-
             var entityAddress = _context.Address.Find(request.Address_Id);
             _mapper.Map(request, entityAddress);
-
-
             _context.SaveChanges();
             return _mapper.Map<PublishersGetDto>(entityPublisher);
         }
@@ -109,7 +91,5 @@ namespace Library.Services
             _context.SaveChanges();
             return _mapper.Map<PublishersGetDto>(entityPublisher);
         }
-
-
     }
 }

@@ -47,10 +47,17 @@ namespace Library.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public  List<AuthorsGetDto> GetAuthorsByBook(int id)
+        [HttpGet("{bookId}")]
+        public async Task<IActionResult> GetAuthorsByBookId(int bookId, CancellationToken cancellationToken)
         {
-            return  _authorService.GetAuthorsByBook(id);
+            try
+            {
+                return Ok(await _authorService.GetAuthorsByBookId(bookId, cancellationToken));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
@@ -91,6 +98,5 @@ namespace Library.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
     }
 }

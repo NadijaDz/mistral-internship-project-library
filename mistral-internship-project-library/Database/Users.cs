@@ -23,7 +23,5 @@ namespace Library.Database
 
         public int Role_Id { get; set; }
 
-
-
     }
 }
